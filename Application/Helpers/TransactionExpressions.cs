@@ -30,7 +30,7 @@ public static class TransactionExpressions
     {
         return source.Where(x => x.DestinationAccount.FirstName.Contains(filter.DestFirstName));
     }
-
+     
     public static IQueryable<Transaction> WhereLastName(this IQueryable<Transaction> source, FilterDTO filter)
     {
         return source.Where(x => x.DestinationAccount.LastName.Contains(filter.DestLastName));

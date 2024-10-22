@@ -5,6 +5,6 @@ namespace Domain.Interfaces;
 
 public interface ITransactionRepository : IFullAuditableRepository<Transaction>
 {
-    Task<IQueryable<Transaction>> GetAllTransactionsForAccount(Guid id);
-    Task<Transaction> GetTransactionDetalized(Guid id);
+    Task<IQueryable<Transaction>> GetAllTransactionsForAccountAsync(Guid id);
+    Task<Transaction> GetTransactionDetalizedAsync(Guid id);
 }

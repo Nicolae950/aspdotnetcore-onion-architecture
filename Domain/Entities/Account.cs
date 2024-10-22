@@ -37,9 +37,54 @@ public class Account : FullAuditableEntity
         Status = AccountStatus.None;
     }
 
-    public void DoTransaction(Transaction transaction, string operation)
+    public void DoTransaction(Transaction transaction)
     {
+        switch (transaction.OperationType)
+        {
+            case OperationType.Deposit:
+                DoDeposit(transaction);
+                break;
+            case OperationType.Withdrawal:
+                DoWithdrawal(transaction);
+                break;
+            case OperationType.Transfer:
+                DoTransfer(transaction); 
+                break;
+        }
+    }
 
+    protected void DoDeposit(Transaction transaction)
+    {
+        CheckAccountStatus();
+        Balance += transaction.Amount;
+        if(Status != AccountStatus.Active)
+            Status = AccountStatus.Active;
+    }
+
+    protected void DoWithdrawal(Transaction transaction)
+    {
+        CheckEligibleForWithdrawal(transaction.Amount);
+        Balance -= transaction.Amount;
+    }
+
+    protected void DoTransfer(Transaction transaction)
+    {
+        if (transaction.SourceAccountId == this.Id)
+        {
+            CheckAccountStatus();
+            CheckEligibleForWithdrawal(transaction.Amount);
+            Balance -= transaction.Amount;
+        }
+        if (transaction.DestinationAccountId == this.Id)
+            Balance += transaction.Amount;
+    }
+
+    public void ReverseTransfer(Transaction transaction)
+    {
+        if (transaction.DestinationAccountId == this.Id)
+            Balance -= transaction.Amount;
+        if (transaction.SourceAccountId == this.Id)
+            Balance += transaction.Amount;
     }
 
     public void ChangeAccountName(string firstName, string lastName)
@@ -48,23 +93,31 @@ public class Account : FullAuditableEntity
         LastName = lastName;
     }
 
-    public void GhangeAccountStatus(AccountStatus status)
+    public void InactivateAccount()
     {
-        Status = status;
+        Status = AccountStatus.Inactive;
     }
 
     public void CheckEligibleForWithdrawal(decimal amount)
     {
         if (Status == AccountStatus.Active)
-            CheckMoneyBalance(amount);
+            CheckEnoughBalance(amount);
         else 
             throw new ApplicationException("Account is not active! Please do a Deposit operation to activate account!");
     }
 
-    public void CheckMoneyBalance(decimal amount)
+    public void CheckEnoughBalance(decimal amount)
     {
         if (amount > Balance)
             throw new NotMoneyException();
+    }
+
+    public bool CheckDeleteBalance()
+    {
+        if (Balance == 0)
+            return true;
+        else
+            throw new Exception("Cannot delete an account with balance!");
     }
 
     public void CheckAccountStatus()

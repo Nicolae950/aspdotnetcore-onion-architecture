@@ -12,12 +12,12 @@ namespace Application.Helpers
 {
     public class AccountHelper
     {
-        public async Task DeleteOwnTransactions(Guid id, ITransactionRepository transactionRepository)
+        public async Task DeleteOwnTransactionsAsync(Guid id, ITransactionRepository transactionRepository)
         {
-            var transactions = await transactionRepository.GetAllTransactionsForAccount(id);
+            var transactions = await transactionRepository.GetAllTransactionsForAccountAsync(id);
             foreach (var transaction in transactions)
             {
-                await transactionRepository.ExecuteUpdate(id, transaction,
+                await transactionRepository.ExecuteUpdateAsync(id, transaction,
                     transaction.GetEligibleForDeleteExpression(id),
                     x => x.SetProperty(t => t.IsDeleted, true));
             }

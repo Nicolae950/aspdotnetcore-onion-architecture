@@ -10,12 +10,13 @@ namespace Application.Interfaces;
 
 public interface ITransactionService
 {
-    Task<IEnumerable<Transaction>> GetAllTransactionsForAccount(Guid accountId, FilterDTO filter);
-    Task<Transaction> GetTransactionDetails(Guid id);
-    Task<Transaction> CreateDeposit(Transaction transaction);
-    Task<Transaction> CreateWithdrawal(Transaction transaction);
-    Task<Transaction> CreateTransfer(Transaction transaction);
-    Task<Transaction> UpdateTransaction(Guid accountId, Transaction transaction);
-    Task ExecuteUpdateTransaction(Guid accountId, Transaction transaction);
+    Task<IEnumerable<Transaction>> GetAllTransactionsForAccountAsync(Guid accountId, FilterDTO filter);
+    Task<IEnumerable<Transaction>> GetLastTransactionsAsync(Guid accountId);
+    Task<Transaction> GetTransactionDetailsAsync(Guid id);
+    Task<Transaction> CreateDepositAsync(Transaction transaction);
+    Task<Transaction> CreateWithdrawalAsync(Transaction transaction);
+    Task<Transaction> CreateTransferAsync(Transaction transaction);
+    Task<Transaction> UpdateTransactionAsync(Guid accountId, Transaction transaction);
+    Task ExecuteUpdateTransactionAsync(Guid accountId, Transaction transaction);
     //Task DeleteTransaction(Guid accountId, Guid transactionId);
 }

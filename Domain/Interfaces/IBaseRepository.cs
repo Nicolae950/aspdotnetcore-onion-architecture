@@ -11,8 +11,8 @@ namespace Domain.Interfaces;
 
 public interface IBaseRepository<T> where T : BaseEntity
 {
-    Task<IEnumerable<T>> GetAll(Guid id);
-    Task<T> GetById(Guid? id);
-    Task<T> Create(T entity);
-    Task Save();
+    Task<IEnumerable<T>> GetAllAsync(Guid id);
+    Task<T> GetByIdAsync(Guid? id);
+    Task<T> CreateAsync(T entity);
+    Task SaveAsync();
 }

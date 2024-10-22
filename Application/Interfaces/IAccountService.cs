@@ -9,9 +9,9 @@ namespace Application.Interfaces;
 
 public interface IAccountService
 {
-    Task<Account> AddAccount(Account account);
-    Task<Account> UpdateAccount(Account account);
-    Task InactivateAccount(Guid id);
-    Task DeleteAccount(Guid id);
-    Task<Account> GetAccountDetails(Guid? id);
+    Task<Account> AddAccountAsync(Account account);
+    Task<Account> UpdateAccountAsync(Account account);
+    Task InactivateAccountAsync(Guid id);
+    Task DeleteAccountAsync(Guid id);
+    Task<Account> GetAccountDetailsAsync(Guid? id);
 }

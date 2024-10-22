@@ -1,17 +1,21 @@
 ﻿using Domain.Entities;
 using Domain.Enums;
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace Application.DTOs;
 
 public class FilterDTO
 {
-    public string? DestFirstName { get; set; }
-    public string? DestLastName { get; set; }
-    public OperationType? OperationType { get; set; }
-    public decimal? MinAmount { get; set; }
-    public decimal? MaxAmount { get; set; }
-    public string? Description { get; set; } // if desc will contain something
+    public string? DestFirstName { get; set; } = null;
+    public string? DestLastName { get; set; } = null;
+    public OperationType? OperationType { get; set; } = null;
+    public decimal? MinAmount { get; set; } = null;
+    public decimal? MaxAmount { get; set; } = null;
+    public string? Description { get; set; } = null; // if desc will contain something
+
+    public int PageNumber { get; set; }
+    public int PageSize { get; set; }
 
     public Expression<Func<Transaction, bool>> MinAmountExpression()
     {
@@ -57,7 +61,7 @@ public class FilterDTO
             query = query.Where(DescriptionExpression());
         if (OperationType != null)
             query = query.Where(OperationExpression());
-        
+
         return query;
     }
 }

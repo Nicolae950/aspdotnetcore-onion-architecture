@@ -19,7 +19,7 @@ public class TransactionRepository : FullAuditableRepository<Transaction>, ITran
         : base(context)
     { }
 
-    public async Task<IQueryable<Transaction>> GetAllTransactionsForAccount(Guid id)
+    public async Task<IQueryable<Transaction>> GetAllTransactionsForAccountAsync(Guid id)
     {
         var transactions = await Task<IQueryable<Transaction>>.Factory.StartNew(t =>
         {
@@ -34,7 +34,7 @@ public class TransactionRepository : FullAuditableRepository<Transaction>, ITran
         return transactions;
     }
 
-    public async Task<Transaction> GetTransactionDetalized(Guid id)
+    public async Task<Transaction> GetTransactionDetalizedAsync(Guid id)
     {
         var transaction = await _dbSet
             .Include(t => t.SourceAccount)

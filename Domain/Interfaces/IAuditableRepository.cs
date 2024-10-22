@@ -11,8 +11,8 @@ namespace Domain.Interfaces
 {
     public interface IAuditableRepository<T> : IBaseRepository<T> where T : AuditableEntity
     {
-        Task Update(T entity);
-        Task ExecuteUpdate(Guid id,
+        Task UpdateAsync(T entity);
+        Task ExecuteUpdateAsync(Guid id,
             T entity,
             Expression<Func<T, bool>> predicate,
             Expression<Func<SetPropertyCalls<T>, SetPropertyCalls<T>>> property);

@@ -14,7 +14,7 @@ namespace Infrastructure.Repositories
         public FullAuditableRepository(ApplicationDbContext context):
             base(context)
         { }
-        public async Task SoftDelete(Guid id, T entity)
+        public async Task SoftDeleteAsync(Guid id, T entity)
         {
             entity.IsDeleted = true;
             await Task.Factory.StartNew(() =>
@@ -23,7 +23,7 @@ namespace Infrastructure.Repositories
             });
         }
 
-        public async Task HardDelete(Guid id)
+        public async Task HardDeleteAsync(Guid id)
         {
             var entity = await _dbSet.FindAsync(id);
             await Task.Factory.StartNew(() =>

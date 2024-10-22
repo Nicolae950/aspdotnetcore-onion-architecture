@@ -75,12 +75,19 @@ public class Transaction : FullAuditableEntity
 
     public bool CheckClientTransferStatus(Guid accountId)
     {
+        if (SourceAccountId == accountId)
+            throw new Exception("You didn't have permission to change this transaction.");
         return StateOfTransaction == StateOfTransaction.Done && SourceAccountId != accountId;
     }
 
-    public void ChangeState(StateOfTransaction state)
+    public void DoneTransaction()
     {
-        StateOfTransaction = state;
+        StateOfTransaction = StateOfTransaction.Done;
+    }
+
+    public void RejectTransaction()
+    {
+        StateOfTransaction = StateOfTransaction.Rejected;
     }
 }
 

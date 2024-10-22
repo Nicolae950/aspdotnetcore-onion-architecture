@@ -26,20 +26,20 @@ public class BaseRepository<T> : IBaseRepository<T> where T: BaseEntity
         }
     }
 
-    public async Task<IEnumerable<T>> GetAll(Guid id)
+    public async Task<IEnumerable<T>> GetAllAsync(Guid id)
     {
         return await _dbSet
             .AsNoTracking()
             .ToListAsync();
     }
 
-    public async Task<T> Create(T entity)
+    public async Task<T> CreateAsync(T entity)
     {
         await _dbSet.AddAsync(entity);
         return entity;
     }
 
-    public async Task<T> GetById(Guid? id)
+    public async Task<T> GetByIdAsync(Guid? id)
     {
         var trackedEntity = await _dbSet.FindAsync(id);
         if (trackedEntity == null)
@@ -47,7 +47,7 @@ public class BaseRepository<T> : IBaseRepository<T> where T: BaseEntity
         return trackedEntity;
     }
 
-    public async Task Save()
+    public async Task SaveAsync()
     {
         int rowsChanged = await _context.SaveChangesAsync();
         if (rowsChanged == 0)

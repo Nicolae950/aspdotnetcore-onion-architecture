@@ -18,7 +18,7 @@ namespace Infrastructure.Repositories
             base(context)
         { }
 
-        public async Task Update(T entity)
+        public async Task UpdateAsync(T entity)
         {
             await Task.Factory.StartNew(() =>
             {
@@ -26,7 +26,7 @@ namespace Infrastructure.Repositories
             });
         }
 
-        public async Task ExecuteUpdate(Guid id, 
+        public async Task ExecuteUpdateAsync(Guid id, 
             T entity, 
             Expression<Func<T, bool>> predicateExpression, 
             Expression<Func<SetPropertyCalls<T>, SetPropertyCalls<T>>> propertyExpression)

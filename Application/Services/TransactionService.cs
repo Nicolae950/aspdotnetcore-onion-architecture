@@ -29,136 +29,133 @@ public class TransactionService : ITransactionService
         _accountRepository = accountRepository;
     }
 
-    public async Task<IEnumerable<Transaction>> GetAllTransactionsForAccount(Guid accountId, FilterDTO filter)
+    public async Task<IEnumerable<Transaction>> GetAllTransactionsForAccountAsync(Guid accountId, FilterDTO filter)
     {
-        var transactions = await _transactionRepository.GetAllTransactionsForAccount(accountId);
+        var transactions = await _transactionRepository.GetAllTransactionsForAccountAsync(accountId);
 
-        var filteredTransactions = await filter.GetFilter(transactions).ToListAsync();
+        var filteredTransactions = await filter.GetFilter(transactions)
+                .Skip(filter.PageSize * (filter.PageNumber - 1))
+                .Take(filter.PageSize)
+                .ToListAsync();
         return filteredTransactions;
     }
 
-    public async Task<Transaction> GetTransactionDetails(Guid id)
+    public async Task<IEnumerable<Transaction>> GetLastTransactionsAsync(Guid accountId)
     {
-        return await _transactionRepository.GetTransactionDetalized(id);
+        var transactions = await _transactionRepository.GetAllTransactionsForAccountAsync(accountId);
+
+        return await transactions
+            .OrderByDescending(t => t.CreatedAt)
+            .Take(3)
+            .ToListAsync();
     }
 
-    public async Task<Transaction> CreateDeposit(Transaction transaction)
+    public async Task<Transaction> GetTransactionDetailsAsync(Guid id)
     {
-        var newTran = await _transactionRepository.Create(transaction);
+        return await _transactionRepository.GetTransactionDetalizedAsync(id);
+    }
 
-        var account = await _accountRepository.GetById(transaction.SourceAccountId);
+    public async Task<Transaction> CreateDepositAsync(Transaction transaction)
+    {
+        var account = await _accountRepository.GetByIdAsync(transaction.SourceAccountId);
 
-        account.CheckAccountStatus();
+        account.DoTransaction(transaction);
 
-        account.ChangeBalance(account.Balance + transaction.Amount);
+        var newTran = await _transactionRepository.CreateAsync(transaction);
 
-        if (account.Status != AccountStatus.Active) await _accountRepository.ActivateAccount(account);
-
-        await _accountRepository.Update(account);
-        await _transactionRepository.Save();
+        await _accountRepository.UpdateAsync(account);
+        await _transactionRepository.SaveAsync();
 
         return newTran;
     }
 
-    public async Task<Transaction> CreateWithdrawal(Transaction transaction)
+    public async Task<Transaction> CreateWithdrawalAsync(Transaction transaction)
     {
         Transaction newTran = null; 
-        var account = await _accountRepository.GetById(transaction.SourceAccountId);
+        var account = await _accountRepository.GetByIdAsync(transaction.SourceAccountId);
+        
+        account.DoTransaction(transaction);
+        
+        newTran = await _transactionRepository.CreateAsync(transaction);
 
-        account.CheckAccountStatus();
-
-        account.CheckEligibleForWithdrawal(transaction.Amount);
-
-        newTran = await _transactionRepository.Create(transaction);
-
-        account.ChangeBalance(account.Balance - transaction.Amount);
-
-        await _accountRepository.Update(account);
-        await _transactionRepository.Save();
+        await _accountRepository.UpdateAsync(account);
+        await _transactionRepository.SaveAsync();
 
         return newTran;
     }
 
-    public async Task<Transaction> CreateTransfer(Transaction transaction)
+    public async Task<Transaction> CreateTransferAsync(Transaction transaction)
     {
         Transaction newTran = null;
 
-        var sAccount = await _accountRepository.GetById(transaction.SourceAccountId);
-        var dAccount = await _accountRepository.GetById(transaction.DestinationAccountId);
+        var sAccount = await _accountRepository.GetByIdAsync(transaction.SourceAccountId);
+        var dAccount = await _accountRepository.GetByIdAsync(transaction.DestinationAccountId);
 
-        sAccount.CheckAccountStatus();
-        dAccount.CheckAccountStatus();
+        sAccount.DoTransaction(transaction);
+        dAccount.DoTransaction(transaction);
+
+        newTran = await _transactionRepository.CreateAsync(transaction);
         
-        sAccount.CheckMoneyBalance(transaction.Amount);
-
-        newTran = await _transactionRepository.Create(transaction);
-
-        sAccount.DoTransaction(newTran, "+");
-        dAccount.DoTransaction(newTran, "-");
-
-        //sAccount.ChangeBalance(sAccount.Balance - transaction.Amount);
-        //dAccount.ChangeBalance(dAccount.Balance + transaction.Amount);
-
-        await _accountRepository.Update(sAccount);
-        await _accountRepository.Update(dAccount);
-        await _transactionRepository.Save();
+        await _accountRepository.UpdateAsync(sAccount);
+        await _accountRepository.UpdateAsync(dAccount);
+        await _transactionRepository.SaveAsync();
 
         return newTran;
     }
 
-    public async Task<Transaction> UpdateTransaction(Guid accountId, Transaction transaction)
+    public async Task<Transaction> UpdateTransactionAsync(Guid accountId, Transaction transaction)
     {
-        var transactionToUpdate = await _transactionRepository.GetById(transaction.Id);
+        var transactionToUpdate = await _transactionRepository.GetByIdAsync(transaction.Id);
 
         transactionToUpdate.IsWaitingTransfer();
 
         if(transaction.CheckClientTransferStatus(accountId)) 
-            transactionToUpdate.ChangeState(transaction.StateOfTransaction);
+            transactionToUpdate.DoneTransaction();
         else
         {
-            await TransactionHelper.RejectedTransactionBalanceUpdate(transactionToUpdate, _accountRepository);
-            transactionToUpdate.ChangeState(StateOfTransaction.Rejected);
+            await TransactionHelper.RejectedTransactionBalanceUpdateAsync(transactionToUpdate, _accountRepository);
+            transactionToUpdate.RejectTransaction();
         }
 
-        await _transactionRepository.Update(transactionToUpdate);
-        await _transactionRepository.Save();
+        await _transactionRepository.UpdateAsync(transactionToUpdate);
+        await _transactionRepository.SaveAsync();
         
         return transactionToUpdate;
     }
 
-    public async Task ExecuteUpdateTransaction(Guid accountId, Transaction transaction)
+    public async Task ExecuteUpdateTransactionAsync(Guid accountId, Transaction transaction)
     {
-        var transactionToUpdate = await _transactionRepository.GetById(transaction.Id);
+        var transactionToUpdate = await _transactionRepository.GetByIdAsync(transaction.Id);
 
         transactionToUpdate.IsWaitingTransfer();
 
         if (transaction.CheckClientTransferStatus(accountId))
-            await _transactionRepository.ExecuteUpdate(
+            await _transactionRepository.ExecuteUpdateAsync(
                 accountId, 
                 transactionToUpdate,
                 t => t.StateOfTransaction == StateOfTransaction.Waiting && t.Id == transaction.Id,
                 p => p.SetProperty(t => t.StateOfTransaction, StateOfTransaction.Done));
         else
         {
-            await _transactionRepository.ExecuteUpdate(
+            await _transactionRepository.ExecuteUpdateAsync(
                 accountId, 
                 transactionToUpdate,
                 t => t.StateOfTransaction == StateOfTransaction.Waiting && t.Id == transaction.Id,
                 p => p.SetProperty(t => t.StateOfTransaction, StateOfTransaction.Rejected));
 
-            await TransactionHelper.ExecuteUpdateAccountsBalance(transactionToUpdate, _accountRepository);
+            await TransactionHelper.ExecuteUpdateAccountsBalanceAsync(transactionToUpdate, _accountRepository);
         }
     }
 
 
-    public async Task DeleteTransaction(Guid accountId, Guid transactionId)
+    public async Task DeleteTransactionAsync(Guid accountId, Guid transactionId)
     {
-        var transaction = await _transactionRepository.GetById(transactionId);
+        var transaction = await _transactionRepository.GetByIdAsync(transactionId);
 
         transaction.IsWaitingTransfer();
 
-        await _transactionRepository.SoftDelete(accountId, transaction);
-        await _transactionRepository.Save();
+        await _transactionRepository.SoftDeleteAsync(accountId, transaction);
+        await _transactionRepository.SaveAsync();
     }
 }
 

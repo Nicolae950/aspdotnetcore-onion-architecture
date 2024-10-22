@@ -9,7 +9,7 @@ namespace Domain.Interfaces
 {
     public interface IFullAuditableRepository<T> : IAuditableRepository<T> where T : FullAuditableEntity
     {
-        Task SoftDelete(Guid id, T entity);
-        Task HardDelete(Guid id);
+        Task SoftDeleteAsync(Guid id, T entity);
+        Task HardDeleteAsync(Guid id);
     }
 }

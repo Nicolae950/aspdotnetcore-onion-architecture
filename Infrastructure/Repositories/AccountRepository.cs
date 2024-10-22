@@ -19,7 +19,7 @@ public class AccountRepository : FullAuditableRepository<Account>, IAccountRepos
         : base(context)
     { }
 
-    public async Task<IEnumerable<Account>> GetAllAccounts()
+    public async Task<IEnumerable<Account>> GetAllAccountsAsync()
     {
         var accounts = await _dbSet
             .Where(a => a.Status != AccountStatus.Inactive && a.IsDeleted == false)
@@ -27,31 +27,19 @@ public class AccountRepository : FullAuditableRepository<Account>, IAccountRepos
         return accounts;
     }
 
-    public async Task<Account> GetAccountWithTransactions(Guid? id)
+    public async Task<Account> GetAccountAsync(Guid? id)
     {
         var account = await _dbSet
-            .Include(a => a.TransactionsAsSource
-                .Where(t => t.IsDeleted == false)
-                )
-            .Include(a => a.TransactionsAsDestination
-                .Where(t => t.IsDeleted == false)
-                )
             .Where(a => a.Id == id)
             .AsNoTracking()
             .FirstAsync();
         return account;
     }
 
-    public async Task InactivateEntity(Account account)
+    public async Task InactivateEntityAsync(Account account)
     {
-        account.GhangeAccountStatus(AccountStatus.Inactive);
-        await base.Update(account);
-    }
-
-    public async Task ActivateAccount(Account account)
-    {
-        account.GhangeAccountStatus(AccountStatus.Active);
-        await base.Update(account);
+        account.InactivateAccount();
+        await base.UpdateAsync(account);
     }
 }
 

@@ -27,49 +27,54 @@ public class AccountService : IAccountService
         accountHelper = new AccountHelper();
     }
         
-    public async Task<Account> AddAccount(Account account)
+    public async Task<Account> AddAccountAsync(Account account)
     {
-        var newAcc = await _accountRepository.Create(account);
+        var newAcc = await _accountRepository.CreateAsync(account);
 
-        await _accountRepository.Save();
+        await _accountRepository.SaveAsync();
             
         return newAcc;
     }
 
-    public async Task<Account> UpdateAccount(Account account)
+    public async Task<Account> UpdateAccountAsync(Account account)
     {
-        var accountToUpdate = await _accountRepository.GetById(account.Id);
+        var accountToUpdate = await _accountRepository.GetByIdAsync(account.Id);
 
         accountToUpdate.ChangeAccountName(account.FirstName, account.LastName);
 
-        await _accountRepository.Update(accountToUpdate);
-        await _accountRepository.Save();
+        await _accountRepository.UpdateAsync(accountToUpdate);
+        await _accountRepository.SaveAsync();
 
         return accountToUpdate;
     }
 
-    public async Task InactivateAccount(Guid id)
+    public async Task InactivateAccountAsync(Guid id)
     {
-        var account = await _accountRepository.GetById(id);
+        var account = await _accountRepository.GetByIdAsync(id);
+        account.CheckAccountStatus();
+        await _accountRepository.InactivateEntityAsync(account);
         
-        await _accountRepository.InactivateEntity(account);
-        
-        await _accountRepository.Save();
+        await _accountRepository.SaveAsync();
     }
 
-    public async Task DeleteAccount(Guid id)
+    public async Task DeleteAccountAsync(Guid id)
     {
-        var account = await _accountRepository.GetById(id);
-
-        await _accountRepository.SoftDelete(account.Id, account);
+        var account = await _accountRepository.GetByIdAsync(id);
+        if (account.CheckDeleteBalance())
+            await _accountRepository.SoftDeleteAsync(account.Id, account);
         //await accountHelper.DeleteOwnTransactions(account.Id, _transactionRepository);
 
-        await _accountRepository.Save();
+        await _accountRepository.SaveAsync();
     }
 
-    public async Task<Account> GetAccountDetails(Guid? id)
+    public async Task<Account> GetAccountDetailsAsync(Guid? id)
     {
-        return await _accountRepository.GetAccountWithTransactions(id);
+        return await _accountRepository.GetAccountAsync(id);
+    }
+
+    public async Task<Account> GetAccount(Guid? id)
+    {
+        return await _accountRepository.GetByIdAsync(id);
     }
 }
 
