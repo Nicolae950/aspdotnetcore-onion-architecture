@@ -7,7 +7,7 @@ public class TransactionDTO
 {
     public Guid? Id { get; set; }
     public Guid? SourceAccountId { get; set; }
-    public StateOfTransaction StateOfTransaction { get; set; }
+    public StateOfTransaction? StateOfTransaction { get; set; }
     public OperationType OperationType { get; set; }
     public decimal Amount { get; set; }
     public Guid? DestinationAccountId { get; set; }

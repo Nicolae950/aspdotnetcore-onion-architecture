@@ -10,7 +10,7 @@ namespace WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-[Authorize]
+//[Authorize]
 public class TransactionController : Controller
 {
     private readonly ITransactionService _transactionService;

@@ -1,5 +1,74 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using WebApp.Models;
+@model ApiResponseViewModel<TransactionDetailsViewModel>;
 @{
+    var data = Model.Data;
 }
+
+<h3>Details</h3>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Update">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Data.Id" class="control-label"></label>
+                <input asp-for="Data.Id" class="form-control" value="@data.Id" />
+                <span asp-validation-for="Data.Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Data.SourceAccountId" class="control-label"></label>
+                <input asp-for="Data.SourceAccountId" class="form-control" value="@data.SourceAccountId"/>
+                <span asp-validation-for="Data.SourceAccountId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Data.SourceFirstName" class="control-label"></label>
+                <input asp-for="Data.SourceFirstName" class="form-control" value="@data.SourceFirstName" />
+                <span asp-validation-for="Data.SourceFirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Data.SourceLastName" class="control-label"></label>
+                <input asp-for="Data.SourceLastName" class="form-control" value="@data.SourceLastName" />
+                <span asp-validation-for="Data.SourceLastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Data.StateOfTransaction" class="control-label"></label>
+                <input id="state-of-transaction" asp-for="Data.StateOfTransaction" class="form-control" value="@data.StateOfTransaction" />
+                <span asp-validation-for="Data.StateOfTransaction" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Data.Amount" class="control-label"></label>
+                <input asp-for="Data.Amount" class="form-control" value="@data.Amount" />
+                <span asp-validation-for="Data.Amount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Data.OperationType" class="control-label"></label>
+                <input asp-for="Data.OperationType" class="form-control" value="@data.OperationType" />
+                <span asp-validation-for="Data.OperationType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Data.Description" class="control-label"></label>
+                <input asp-for="Data.Description" class="form-control" value="@data.Description" />
+                <span asp-validation-for="Data.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Data.DestinationAccountId" class="control-label"></label>
+                <input asp-for="Data.DestinationAccountId" class="form-control" value="@data.DestinationAccountId" />
+                <span asp-validation-for="Data.DestinationAccountId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Data.DestinationFirstName" class="control-label"></label>
+                <input asp-for="Data.DestinationFirstName" class="form-control" value="@data.DestinationFirstName" />
+                <span asp-validation-for="Data.DestinationFirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Data.DestinationLastName" class="control-label"></label>
+                <input asp-for="Data.DestinationLastName" class="form-control" value="@data.DestinationLastName" />
+                <span asp-validation-for="Data.DestinationLastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input id="update-reject-button" type="submit" value="Reject" class="btn btn-primary" />
+                <input id="update-accept-button" type="submit" value="Accept" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>

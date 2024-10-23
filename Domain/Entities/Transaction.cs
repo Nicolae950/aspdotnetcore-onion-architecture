@@ -48,13 +48,13 @@ public class Transaction : FullAuditableEntity
 
     public Transaction(Guid transactionId,
         Guid? sourceAccountId, decimal amount,
-        StateOfTransaction state, OperationType type,
+        StateOfTransaction? state, OperationType type,
         Guid? destinationAccountId, string? description)
     {
         Id = transactionId;
         SourceAccountId = (Guid)sourceAccountId;
         Amount = amount;
-        StateOfTransaction = state;
+        StateOfTransaction = (StateOfTransaction)state;
         OperationType = type;
         DestinationAccountId = destinationAccountId;
         Description = description;
