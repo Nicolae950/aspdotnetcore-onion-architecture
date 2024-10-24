@@ -1,7 +1,7 @@
 ﻿@using WebApp.Models.Account
 @model DetalizedAccountViewModel;
 
-<h3>Update Account</h3>
+<h3>Account Details</h3>
 
 <div class="row">
     <div class="col-md-4">
@@ -37,9 +37,8 @@
                 <input asp-for="Status" class="form-control" value="@Model.Status" />
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
-            <div>
-                <a href="~/Account/Details/@Model.Id"><input value="Back To Details" class="btn btn-secondary"/></a>
-                <input type="submit" value="Update Account" class="btn btn-primary"/>
+            <div class="form-group">
+                <a href="~/Account/Update/@Model.Id"><input value="Update" class="btn btn-primary" /></a>
             </div>
         </form>
     </div>

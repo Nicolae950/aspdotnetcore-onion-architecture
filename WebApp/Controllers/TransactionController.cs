@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using WebApp.DTOs;
 using WebApp.Models;
+using WebApp.Models.Transaction;
 
 namespace WebApp.Controllers;
 
@@ -14,10 +14,10 @@ public class TransactionController : Controller
         _client.BaseAddress = new Uri("https://localhost:44316/api/Transaction");
     }
     [HttpGet]
-    public async Task<IActionResult> Index(Guid id, [FromQuery]PaginatedViewModel paginated)
+    public async Task<IActionResult> IndexAsync(Guid accId, [FromQuery]PaginatedViewModel paginated)
     {
         var transactions = new ApiResponseViewModel<List<TransactionViewModel>>();
-        var path = $"/GetAllTransaction/{id}?PageNumber={paginated.PageNumber}&PageSize={paginated.PageSize}";
+        var path = $"/GetAllTransaction/{accId}?PageNumber={paginated.PageNumber}&PageSize={paginated.PageSize}";
         HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + path);
 
         if (response.IsSuccessStatusCode)
@@ -30,41 +30,73 @@ public class TransactionController : Controller
     }
 
     [HttpGet]
-    public IActionResult Deposit(Guid id)
+    public IActionResult Deposit(Guid accId)
     {
         return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> Deposit(Guid id, TransactionDTO transactionDTO)
+    public async Task<IActionResult> DepositAsync(Guid accId, TransactionDTO transactionDTO)
     {
         HttpResponseMessage response = await _client.PostAsJsonAsync(_client.BaseAddress //serializarea
-            + $"/CreateDeposit/{id}", transactionDTO);
+            + $"/CreateDeposit/{accId}", transactionDTO);
         response.EnsureSuccessStatusCode();
 
         return RedirectToAction();
     }
 
     [HttpGet]
-    public async Task<IActionResult> Details(Guid id, Guid tranId)
+    public IActionResult Withdraw(Guid accId)
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> WithdrawAsync(Guid accId, TransactionDTO transactionDTO)
+    {
+        HttpResponseMessage response = await _client.PostAsJsonAsync(_client.BaseAddress //serializarea
+            + $"/CreateWithdrawal/{accId}", transactionDTO);
+        response.EnsureSuccessStatusCode();
+
+        return RedirectToAction();
+    }
+
+    [HttpGet]
+    public IActionResult Transfer(Guid accId)
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> TransferAsync(Guid accId, TransactionDTO transactionDTO)
+    {
+        HttpResponseMessage response = await _client.PostAsJsonAsync(_client.BaseAddress //serializarea
+            + $"/CreateTransfer/{accId}", transactionDTO);
+        response.EnsureSuccessStatusCode();
+
+        return RedirectToAction();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> DetailsAsync(Guid accId, Guid tranId)
     {
         var transaction = new ApiResponseViewModel<TransactionDetailsViewModel>();
-        var path = $"/GetTransactionDetails/{id}/{tranId}";
+        var path = $"/GetTransactionDetails/{accId}/{tranId}";
         HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + path);
         
         if (response.IsSuccessStatusCode)
             transaction = await response.Content.ReadAsAsync<ApiResponseViewModel<TransactionDetailsViewModel>>(); // deserializare
-        
-        return View(transaction);
+        ViewData["Id"] = accId;
+        return View(transaction.Data);
     }
 
-    [HttpPut]
-    public async Task<IActionResult> Update(TransactionDetailsViewModel transaction)
+    [HttpPost]
+    public async Task<IActionResult> UpdateAsync(Guid accId, TransactionDetailsViewModel transaction)
     {
-        HttpResponseMessage response = await _client.PutAsJsonAsync(_client.BaseAddress + 
-            $"/UpdateTransfer/{transaction.DestinationAccountId}/{transaction.Id}", transaction);
+        HttpResponseMessage response = await _client.PutAsJsonAsync(_client.BaseAddress +
+            $"/UpdateTransfer/{accId}/{transaction.Id}", transaction);
         response.EnsureSuccessStatusCode();
 
-        return RedirectToAction();
+        return RedirectToAction("Details", new { id = transaction.DestinationAccountId, tranId = transaction.Id});
     }
 }

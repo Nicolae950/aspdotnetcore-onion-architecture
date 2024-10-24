@@ -28,7 +28,7 @@ public class Program
 
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}/{tranId?}");
+            pattern: "{controller=Home}/{action=Index}/{accId?}/{tranId?}");
 
         app.Run();
     }

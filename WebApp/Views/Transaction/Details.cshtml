@@ -1,7 +1,7 @@
-﻿@using WebApp.Models;
-@model ApiResponseViewModel<TransactionDetailsViewModel>;
+﻿@using WebApp.Models.Transaction
+@model TransactionDetailsViewModel;
 @{
-    var data = Model.Data;
+    var data = Model;
 }
 
 <h3>Details</h3>
@@ -11,63 +11,63 @@
         <form asp-action="Update">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Data.Id" class="control-label"></label>
-                <input asp-for="Data.Id" class="form-control" value="@data.Id" />
-                <span asp-validation-for="Data.Id" class="text-danger"></span>
+                <label asp-for="Id" class="control-label"></label>
+                <input asp-for="Id" class="form-control" value="@data.Id" />
+                <span asp-validation-for="Id" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Data.SourceAccountId" class="control-label"></label>
-                <input asp-for="Data.SourceAccountId" class="form-control" value="@data.SourceAccountId"/>
-                <span asp-validation-for="Data.SourceAccountId" class="text-danger"></span>
+                <label asp-for="SourceAccountId" class="control-label"></label>
+                <input asp-for="SourceAccountId" class="form-control" value="@data.SourceAccountId"/>
+                <span asp-validation-for="SourceAccountId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Data.SourceFirstName" class="control-label"></label>
-                <input asp-for="Data.SourceFirstName" class="form-control" value="@data.SourceFirstName" />
-                <span asp-validation-for="Data.SourceFirstName" class="text-danger"></span>
+                <label asp-for="SourceFirstName" class="control-label"></label>
+                <input asp-for="SourceFirstName" class="form-control" value="@data.SourceFirstName" />
+                <span asp-validation-for="SourceFirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Data.SourceLastName" class="control-label"></label>
-                <input asp-for="Data.SourceLastName" class="form-control" value="@data.SourceLastName" />
-                <span asp-validation-for="Data.SourceLastName" class="text-danger"></span>
+                <label asp-for="SourceLastName" class="control-label"></label>
+                <input asp-for="SourceLastName" class="form-control" value="@data.SourceLastName" />
+                <span asp-validation-for="SourceLastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Data.StateOfTransaction" class="control-label"></label>
-                <input id="state-of-transaction" asp-for="Data.StateOfTransaction" class="form-control" value="@data.StateOfTransaction" />
-                <span asp-validation-for="Data.StateOfTransaction" class="text-danger"></span>
+                <label asp-for="StateOfTransaction" class="control-label"></label>
+                <input id="state-of-transaction" asp-for="StateOfTransaction" class="form-control" value="@data.StateOfTransaction" />
+                <span asp-validation-for="StateOfTransaction" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Data.Amount" class="control-label"></label>
-                <input asp-for="Data.Amount" class="form-control" value="@data.Amount" />
-                <span asp-validation-for="Data.Amount" class="text-danger"></span>
+                <label asp-for="Amount" class="control-label"></label>
+                <input asp-for="Amount" class="form-control" value="@data.Amount" />
+                <span asp-validation-for="Amount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Data.OperationType" class="control-label"></label>
-                <input asp-for="Data.OperationType" class="form-control" value="@data.OperationType" />
-                <span asp-validation-for="Data.OperationType" class="text-danger"></span>
+                <label asp-for="OperationType" class="control-label"></label>
+                <input asp-for="OperationType" class="form-control" value="@data.OperationType" />
+                <span asp-validation-for="OperationType" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Data.Description" class="control-label"></label>
-                <input asp-for="Data.Description" class="form-control" value="@data.Description" />
-                <span asp-validation-for="Data.Description" class="text-danger"></span>
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" value="@data.Description" />
+                <span asp-validation-for="Description" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Data.DestinationAccountId" class="control-label"></label>
-                <input asp-for="Data.DestinationAccountId" class="form-control" value="@data.DestinationAccountId" />
-                <span asp-validation-for="Data.DestinationAccountId" class="text-danger"></span>
+                <label asp-for="DestinationAccountId" class="control-label"></label>
+                <input asp-for="DestinationAccountId" class="form-control" value="@data.DestinationAccountId" />
+                <span asp-validation-for="DestinationAccountId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Data.DestinationFirstName" class="control-label"></label>
-                <input asp-for="Data.DestinationFirstName" class="form-control" value="@data.DestinationFirstName" />
-                <span asp-validation-for="Data.DestinationFirstName" class="text-danger"></span>
+                <label asp-for="DestinationFirstName" class="control-label"></label>
+                <input asp-for="DestinationFirstName" class="form-control" value="@data.DestinationFirstName" />
+                <span asp-validation-for="DestinationFirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Data.DestinationLastName" class="control-label"></label>
-                <input asp-for="Data.DestinationLastName" class="form-control" value="@data.DestinationLastName" />
-                <span asp-validation-for="Data.DestinationLastName" class="text-danger"></span>
+                <label asp-for="DestinationLastName" class="control-label"></label>
+                <input asp-for="DestinationLastName" class="form-control" value="@data.DestinationLastName" />
+                <span asp-validation-for="DestinationLastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input id="update-reject-button" type="submit" value="Reject" class="btn btn-primary" />
-                <input id="update-accept-button" type="submit" value="Accept" class="btn btn-primary" />
+                <input id="update-reject-button" type="submit" value="Reject Transfer" formaction="/Transaction/Update/@ViewData["Id"]" class="btn btn-primary" />
+                <input id="update-accept-button" type="submit" value="Accept Transfer" formaction="/Transaction/Update/@ViewData["Id"]" class="btn btn-primary" />
             </div>
         </form>
     </div>

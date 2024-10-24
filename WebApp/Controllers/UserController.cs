@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebApp.DTOs;
 using WebApp.Models;
+using WebApp.Models.User;
 
 namespace WebApp.Controllers
 {
@@ -27,8 +28,8 @@ namespace WebApp.Controllers
 
             if(response.IsSuccessStatusCode)
                 loggedResult = await response.Content.ReadAsAsync<ApiResponseViewModel<UserViewModel>>();
-
-            return RedirectToAction(); //Index -> GetAllAccounts / Account -> controller / object = Data.Token
+            
+            return RedirectToAction("Index", "Account", loggedResult.Data.Token); //Index -> GetAllAccounts / Account -> controller / object = Data.Token
         }
     }
 }
