@@ -4,6 +4,7 @@ namespace WebAPI.ViewModels
 {
     public class AccountTransactionsVM
     {
+        public Guid Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public decimal Balance { get; set; }
@@ -11,6 +12,7 @@ namespace WebAPI.ViewModels
 
         public AccountTransactionsVM(Account account, IEnumerable<Transaction>? transactions)
         {
+            Id = account.Id;
             FirstName = account.FirstName;
             LastName = account.LastName;
             Balance = account.Balance;

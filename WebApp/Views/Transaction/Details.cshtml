@@ -11,63 +11,86 @@
         <form asp-action="Update">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Id" class="control-label"></label>
-                <input asp-for="Id" class="form-control" value="@data.Id" />
+                <label asp-for="Id" class="control-label p-1"></label>
+                <input asp-for="Id" class="form-control p-1" value="@data.Id" />
                 <span asp-validation-for="Id" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SourceAccountId" class="control-label"></label>
-                <input asp-for="SourceAccountId" class="form-control" value="@data.SourceAccountId"/>
+                <label asp-for="SourceAccountId" class="control-label p-1"></label>
+                <input asp-for="SourceAccountId" class="form-control p-1" value="@data.SourceAccountId"/>
                 <span asp-validation-for="SourceAccountId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SourceFirstName" class="control-label"></label>
-                <input asp-for="SourceFirstName" class="form-control" value="@data.SourceFirstName" />
+                <label asp-for="SourceFirstName" class="control-label p-1"></label>
+                <input asp-for="SourceFirstName" class="form-control p-1" value="@data.SourceFirstName" />
                 <span asp-validation-for="SourceFirstName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="SourceLastName" class="control-label"></label>
-                <input asp-for="SourceLastName" class="form-control" value="@data.SourceLastName" />
+                <label asp-for="SourceLastName" class="control-label p-1"></label>
+                <input asp-for="SourceLastName" class="form-control p-1" value="@data.SourceLastName" />
                 <span asp-validation-for="SourceLastName" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="StateOfTransaction" class="control-label"></label>
-                <input id="state-of-transaction" asp-for="StateOfTransaction" class="form-control" value="@data.StateOfTransaction" />
+                <label asp-for="StateOfTransaction" class="control-label p-1"></label>
+                <input id="state-of-transaction" asp-for="StateOfTransaction" class="form-control p-1" value="@data.StateOfTransaction" />
                 <span asp-validation-for="StateOfTransaction" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Amount" class="control-label"></label>
-                <input asp-for="Amount" class="form-control" value="@data.Amount" />
+                <label asp-for="Amount" class="control-label p-1"></label>
+                <input asp-for="Amount" class="form-control p-1" value="@data.Amount" />
                 <span asp-validation-for="Amount" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="OperationType" class="control-label"></label>
-                <input asp-for="OperationType" class="form-control" value="@data.OperationType" />
+                <label asp-for="OperationType" class="control-label p-1"></label>
+                <input asp-for="OperationType" class="form-control p-1" value="@data.OperationType" />
                 <span asp-validation-for="OperationType" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" value="@data.Description" />
+                <label asp-for="Description" class="control-label p-1"></label>
+                <input asp-for="Description" class="form-control p-1" value="@data.Description" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="DestinationAccountId" class="control-label"></label>
-                <input asp-for="DestinationAccountId" class="form-control" value="@data.DestinationAccountId" />
-                <span asp-validation-for="DestinationAccountId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DestinationFirstName" class="control-label"></label>
-                <input asp-for="DestinationFirstName" class="form-control" value="@data.DestinationFirstName" />
-                <span asp-validation-for="DestinationFirstName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DestinationLastName" class="control-label"></label>
-                <input asp-for="DestinationLastName" class="form-control" value="@data.DestinationLastName" />
-                <span asp-validation-for="DestinationLastName" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input id="update-reject-button" type="submit" value="Reject Transfer" formaction="/Transaction/Update/@ViewData["Id"]" class="btn btn-primary" />
-                <input id="update-accept-button" type="submit" value="Accept Transfer" formaction="/Transaction/Update/@ViewData["Id"]" class="btn btn-primary" />
+            @if(data.DestinationAccountId != null)
+            {
+                <div class="form-group">
+                    <label asp-for="DestinationAccountId" class="control-label p-1"></label>
+                    <input asp-for="DestinationAccountId" class="form-control p-1" value="@data.DestinationAccountId" />
+                    <span asp-validation-for="DestinationAccountId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DestinationFirstName" class="control-label p-1"></label>
+                    <input asp-for="DestinationFirstName" class="form-control p-1" value="@data.DestinationFirstName" />
+                    <span asp-validation-for="DestinationFirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DestinationLastName" class="control-label p-1"></label>
+                    <input asp-for="DestinationLastName" class="form-control p-1" value="@data.DestinationLastName" />
+                    <span asp-validation-for="DestinationLastName" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <div class="form-group">
+                    <label asp-for="DestinationAccountId" class="control-label p-1"></label>
+                    <input asp-for="DestinationAccountId" class="form-control p-1" value="-" disabled/>
+                    <span asp-validation-for="DestinationAccountId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DestinationFirstName" class="control-label p-1"></label>
+                    <input asp-for="DestinationFirstName" class="form-control p-1" value="-" disabled/>
+                    <span asp-validation-for="DestinationFirstName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="DestinationLastName" class="control-label p-1"></label>
+                    <input asp-for="DestinationLastName" class="form-control p-1" value="-" disabled/>
+                    <span asp-validation-for="DestinationLastName" class="text-danger"></span>
+                </div>
+            }
+            
+            <div class="form-group p-2">
+                <a href="~/Transaction/Index/@ViewData["accId"]"><input value="Back" class="btn btn-secondary p-1" /></a>
+                <input id="update-reject-button" type="submit" value="Reject Transfer" formaction="/Transaction/Update/@ViewData["accId"]" class="btn btn-primary p-1" />
+                <input id="update-accept-button" type="submit" value="Accept Transfer" formaction="/Transaction/Update/@ViewData["accId"]" class="btn btn-primary p-1" />
             </div>
         </form>
     </div>

@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
+using NuGet.Common;
+using System.Net.Http.Headers;
 using System.Text;
 using WebApp.DTOs;
 using WebApp.Models;
@@ -14,19 +17,36 @@ public class AccountController : Controller
     {
         _client = new HttpClient();
         _client.BaseAddress = new Uri("https://localhost:44316/api/Account");
-        //_client.DefaultRequestHeaders.Authorization
     }
 
     [HttpGet]
-    public async Task<IActionResult> Index(Guid accId)
+    public async Task<IActionResult> IndexAsync(Guid accId)
     {
-        return View();
+        var account = new ApiResponseViewModel<AccountViewModel>();
+
+        var token = "";
+        HttpContext.Request.Cookies.TryGetValue("token", out token);
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        
+        HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress
+            + $"/GetAccountById/{accId}");
+        
+        if (response.IsSuccessStatusCode)
+        {
+            account = await response.Content.ReadAsAsync<ApiResponseViewModel<AccountViewModel>>();
+        }
+        return View(account.Data);
     }
 
     [HttpGet]
     public async Task<IActionResult> DetailsAsync(Guid accId)
     {
         var account = new ApiResponseViewModel<DetalizedAccountViewModel>();
+
+        var token = "";
+        HttpContext.Request.Cookies.TryGetValue("token", out token);
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
         HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress
             + $"/Details/{accId}");
         if (response.IsSuccessStatusCode)
@@ -46,16 +66,32 @@ public class AccountController : Controller
     [HttpPost]
     public async Task<IActionResult> CreateAsync(AccountDTO accountDTO)
     {
+        var account = new ApiResponseViewModel<AccountViewModel>();
+
+        var token = "";
+        HttpContext.Request.Cookies.TryGetValue("token", out token);
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
         HttpResponseMessage response = await _client.PostAsJsonAsync(_client.BaseAddress
             + $"/CreateAccount", accountDTO);
-        response.EnsureSuccessStatusCode();
-        return RedirectToAction("Index");
+
+        if (response.IsSuccessStatusCode)
+        {
+            account = await response.Content.ReadAsAsync<ApiResponseViewModel<AccountViewModel>>();
+        }
+
+        return RedirectToAction("Index", new { accId = account.Data.Id });
     }
 
     [HttpGet]
     public async Task<IActionResult> Update(Guid accId)
     {
         var account = new ApiResponseViewModel<DetalizedAccountViewModel>();
+
+        var token = "";
+        HttpContext.Request.Cookies.TryGetValue("token", out token);
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
         HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress
             + $"/Details/{accId}");
         if (response.IsSuccessStatusCode)
@@ -72,6 +108,11 @@ public class AccountController : Controller
         var accountDTO = new AccountDTO();
         accountDTO.FirstName = detalizedAccount.FirstName;
         accountDTO.LastName = detalizedAccount.LastName;
+
+        var token = "";
+        HttpContext.Request.Cookies.TryGetValue("token", out token);
+        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
         HttpResponseMessage response = await _client.PutAsJsonAsync(_client.BaseAddress
             + $"/UpdateAccount/{detalizedAccount.Id}", accountDTO);
 

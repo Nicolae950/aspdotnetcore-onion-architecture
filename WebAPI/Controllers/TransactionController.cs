@@ -10,7 +10,7 @@ namespace WebAPI.Controllers;
 
 [ApiController]
 [Route("api/[controller]/[action]")]
-//[Authorize]
+[Authorize]
 public class TransactionController : Controller
 {
     private readonly ITransactionService _transactionService;
@@ -51,6 +51,36 @@ public class TransactionController : Controller
             return BadRequest(new StatusVM<DetalizedTransactionVM>(ex.Message));
         }
     }
+
+    //[HttpPost("{accountId}")]
+    //public async Task<IActionResult> CreateTransactionAsync(Guid accountId, [FromBody] TransactionDTO transactionDTO)
+    //{
+    //    try
+    //    {
+    //        switch (transactionDTO.OperationType)
+    //        {
+    //            case OperationType.Deposit:
+    //                var transactionD = transactionDTO.MapDTOToTransaction(accountId, StateOfTransaction.Done, OperationType.Deposit);
+    //                var transactionDVM = new DetalizedTransactionVM(await _transactionService.CreateDepositAsync(transactionD));
+    //                return Ok(new StatusVM<DetalizedTransactionVM>(transactionDVM));
+                
+    //            case OperationType.Withdrawal:
+    //                var transactionW = transactionDTO.MapDTOToTransaction(accountId, StateOfTransaction.Done, OperationType.Withdrawal);
+    //                var createdTransactionW = await _transactionService.CreateWithdrawalAsync(transactionW);
+    //                var transactionWVM = new DetalizedTransactionVM(transactionW);
+    //                return Ok(new StatusVM<DetalizedTransactionVM>(transactionWVM));
+
+    //            case OperationType.Transfer:
+    //                var transactionT = transactionDTO.MapDTOToTransaction(accountId, StateOfTransaction.Waiting, OperationType.Transfer);
+    //                var createdTransactionT = await _transactionService.CreateTransferAsync(transactionT);
+    //                var transactionTVM = new DetalizedTransactionVM(transactionT);
+    //                return Ok(new StatusVM<DetalizedTransactionVM>(transactionTVM));
+    //        }
+    //    }catch(Exception ex)
+    //    {
+    //        return BadRequest(new StatusVM<DetalizedTransactionVM>(ex.Message));
+    //    }
+    //}
 
     [HttpPost("{accountId}")]
     public async Task<IActionResult> CreateDepositAsync(Guid accountId, [FromBody] TransactionDTO transactionDTO)

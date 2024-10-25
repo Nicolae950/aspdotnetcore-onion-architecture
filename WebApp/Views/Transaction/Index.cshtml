@@ -1,43 +1,46 @@
 ﻿@using WebApp.Models.Transaction
-@model WebApp.Models.ApiResponseViewModel<List<TransactionViewModel>>
+@model List<TransactionViewModel>
 
 
 <h3>All Transactions</h3>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                Transaction Id
-            </th>
-            <th>
-                Operation Type
-            </th>
-            <th>
-                Amount
-            </th>
-            <th>
-                Destiantion Name
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Data)
-        {
+<div class="form-control">
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @item.Id
-                </td>
-                <td>
-                    @item.OperationType
-                </td>
-                <td>
-                    @item.Amount
-                </td>
-                <td>
-                    @item.DestinationFirstName @item.DestinationLastName
-                </td>
+                <th>
+                    Transaction Id
+                </th>
+                <th>
+                    Operation Type
+                </th>
+                <th>
+                    Amount
+                </th>
+                <th>
+                    Destiantion Name
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.OperationType</td>
+                    <td>@item.Amount</td>
+                    <td>@item.DestinationFirstName @item.DestinationLastName</td>
+                    <td>
+                        <a href="~/Transaction/Details/@ViewData["accId"]/@item.Id">
+                            <input value="Details" class="btn btn-primary" />
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <div class="p-2">
+        <a href="~/Account/Index/@ViewData["accId"]"><input class="btn btn-secondary p-1" value="Back to Account"/></a>
+    </div>
+</div>

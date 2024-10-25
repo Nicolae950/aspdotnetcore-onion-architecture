@@ -1,5 +1,76 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using WebApp.Models.Account
+@model AccountViewModel;
+
+<h3>Account</h3>
+<div class="row">
+    <div class="d-flex align-items-center">
+        <div class="col-md-4">
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label p-1"></label>
+                <input asp-for="FirstName" class="form-control" value="@Model.FirstName" />
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label p-1"></label>
+                <input asp-for="LastName" class="form-control" value="@Model.LastName" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Balance" class="control-label p-1"></label>
+                <input asp-for="Balance" class="form-control" value="@Model.Balance" />
+            </div>
+        </div>
+        <div class="col-md-3 p-2 mt-3">
+            <div class="p-2">
+                <a href="~/Transaction/Deposit/@Model.Id">
+                    <input value="Deposit Transaction" class="btn btn-primary"/>
+                </a>
+            </div>
+            <div class="p-2">
+                <a href="~/Transaction/Withdraw/@Model.Id">
+                    <input value="Withdraw Transaction" class="btn btn-primary"/>
+                </a>
+            </div>
+            <div class="p-2">
+                <a href="~/Transaction/Transfer/@Model.Id">
+                    <input value="Transfer Transaction" class="btn btn-primary"/>
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="d-flex align-items-center p-1">
+            <h5 class="p-2">Transactions</h5>
+            <a href="~/Transaction/Index/@Model.Id?PageNumber=1&PageSize=8">
+                <input value="View All Transacitons" class="p-2 btn btn-primary" />
+            </a>
+        </div>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Amount</th>
+                    <th>Operation Type</th>
+                    <th>Destiantion Account</th>
+                    <th>Destination Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Transactions)
+                {
+                    <tr>
+                        <td>@item.Amount</td>
+                        <td>@item.OperationType</td>
+                        @if(item.DestinationAccountId != null)
+                        {
+                            <td>@item.DestinationAccountId</td>
+                            <td>@item.DestinationFirstName @item.DestinationLastName</td>
+                        }
+                        else
+                        {
+                            <td> - </td>
+                            <td> - </td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
