@@ -17,6 +17,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Account> Accounts { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
     public DbSet<User> Users { get; set; }
+    public DbSet<Report> Reports { get; set; }
 
     public readonly IHttpContextAccessor _httpContextAccessor;
 
@@ -30,7 +31,9 @@ public class ApplicationDbContext : DbContext
     {
         new AccountEntityConfiguration().Configure(modelBuilder.Entity<Account>());
         new TransactionEntityConfiguration().Configure(modelBuilder.Entity<Transaction>());
-
+        
+        //new UserEntityConfiguration().Configure(modelBuilder.Entity<User>());
+        
         //modelBuilder.ApplyConfigurationsFromAssembly(typeof(AccountEntityConfiguration).Assembly);
     }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

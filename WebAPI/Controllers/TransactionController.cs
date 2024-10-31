@@ -26,14 +26,16 @@ public class TransactionController : Controller
         {
             var transactions = await _transactionService.GetAllTransactionsForAccountAsync(accountId, filter);
             
-            var transactionsVM = transactions
-                .Select(x => new DetalizedTransactionVM(x));
-            
-            return Ok(new StatusVM<IEnumerable<DetalizedTransactionVM>>(transactionsVM));
+            var transactionsVM = transactions.Transactions
+                .Select(x => new TransactionVM(x));
+
+            var paginatedResultVM = new PaginatedResultVM(transactionsVM, transactions.TotalTransactions);
+            var result = new StatusVM<PaginatedResultVM>(paginatedResultVM);
+            return Ok(result);
         
         }catch(Exception ex)
         {
-            return BadRequest(new StatusVM<DetalizedTransactionVM>(ex.Message));
+            return BadRequest(new StatusVM<PaginatedResultVM>(ex.Message));
         }
     }
 

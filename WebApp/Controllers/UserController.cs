@@ -23,7 +23,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(UserDTO user)
+        public async Task<IActionResult> LoginAsync(UserDTO user)
         {
             var loggedResult = new ApiResponseViewModel<UserViewModel>();
             HttpResponseMessage response = await _client.PostAsJsonAsync(_client.BaseAddress + "/Login", user);
@@ -33,9 +33,14 @@ namespace WebApp.Controllers
                 loggedResult = await response.Content.ReadAsAsync<ApiResponseViewModel<UserViewModel>>();
                 
                 HttpContext.Response.Cookies.Append("token", loggedResult.Data.Token);
+
+                return RedirectToAction("Overview", "Account", new { accId = loggedResult.Data.Id });
+            }
+            else
+            {
+                return RedirectToAction("Login");
             }
 
-            return RedirectToAction("Index", "Account", new { accId = Guid.Parse("FC5DA266-7C89-4A12-9A90-AE3DE6C709D9") }); 
             //Index -> GetAllAccounts / Account -> controller / object = Data.Token
         }
     }

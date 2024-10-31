@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
 using Application.Helpers;
 using Application.Interfaces;
+using Application.ViewModels;
 using Domain.Entities;
 using Domain.Enums;
 using Domain.Exceptions;
@@ -29,15 +30,18 @@ public class TransactionService : ITransactionService
         _accountRepository = accountRepository;
     }
 
-    public async Task<IEnumerable<Transaction>> GetAllTransactionsForAccountAsync(Guid accountId, FilterDTO filter)
+    public async Task<PaginatedVM> GetAllTransactionsForAccountAsync(Guid accountId, FilterDTO filter)
     {
         var transactions = await _transactionRepository.GetAllTransactionsForAccountAsync(accountId);
+
+        var count = await filter.GetFilter(transactions).CountAsync();
 
         var filteredTransactions = await filter.GetFilter(transactions)
                 .Skip(filter.PageSize * (filter.PageNumber - 1))
                 .Take(filter.PageSize)
                 .ToListAsync();
-        return filteredTransactions;
+
+        return new PaginatedVM(filteredTransactions, count);
     }
 
     public async Task<IEnumerable<Transaction>> GetLastTransactionsAsync(Guid accountId)
@@ -46,7 +50,20 @@ public class TransactionService : ITransactionService
 
         return await transactions
             .OrderByDescending(t => t.CreatedAt)
-            .Take(3)
+            .Take(4)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Transaction>> GetTransactionsByTimeAsync(Guid accountId, DateTime? From, DateTime? To)
+    {
+        if (From == null) From = DateTime.Now.Subtract(TimeSpan.FromHours(1D));
+
+        if (To == null) To = DateTime.Now;
+
+        var transactions = await _transactionRepository.GetAllTransactionsForAccountAsync(accountId);
+        return await transactions
+            .OrderByDescending(t => t.CreatedAt)
+            .Where(t => t.CreatedAt > From && t.CreatedAt < To)
             .ToListAsync();
     }
 

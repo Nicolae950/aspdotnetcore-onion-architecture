@@ -1,3 +1,4 @@
+
 namespace WebApp;
 
 public class Program
@@ -29,7 +30,8 @@ public class Program
 
         app.MapControllerRoute(
             name: "default",
-            pattern: "{controller=Home}/{action=Index}/{accId?}/{tranId?}");
+            pattern: "{controller=User}/{action=Login}/{accId?}/{tranId?}");
+            //pattern: "{controller=Account}/{action=Overview}/{accId = 01A11E2C-7671-4B62-8B8E-08DCEF6616A4}/{tranId?}");
 
         app.Run();
     }

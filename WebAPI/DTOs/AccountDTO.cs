@@ -13,9 +13,9 @@ public class AccountDTO
     public string FirstName { get; set; }
     public string LastName { get; set; }
 
-    public Account MapDTOToAccount()
+    public Account MapDTOToAccount(Guid userId)
     {
-        return new Account(FirstName, LastName);
+        return new Account(FirstName, LastName, userId);
     }
     public Account MapDTOToAccountWithId(Guid id)
     {

@@ -9,6 +9,7 @@ namespace Application.Interfaces;
 
 public interface IAccountService
 {
+    Task<IEnumerable<Account>> GetAllAccountsAsync(Guid id);
     Task<Account> AddAccountAsync(Account account);
     Task<Account> UpdateAccountAsync(Account account);
     Task InactivateAccountAsync(Guid id);

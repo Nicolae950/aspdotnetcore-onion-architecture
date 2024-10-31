@@ -1,10 +1,25 @@
-﻿@using WebApp.Models.Transaction
-@model List<TransactionViewModel>
+﻿@using WebApp.Models
+@model PaginatedViewModel;
+@{
+    int calculateNumberOfPages()
+    {
+        if (Model.TotalTransactions <= 8)
+            return 1;
+        else
+        {
+            if (Model.TotalTransactions % 8 > 0)
+                return (Model.TotalTransactions / 8) + 1;
+            else
+                return (Model.TotalTransactions / 8);
+        }
+    }
+    int numberOfPages = calculateNumberOfPages();
+}
 
 
 <h3>All Transactions</h3>
 
-<div class="form-control">
+<div>
     <table class="table">
         <thead>
             <tr>
@@ -24,7 +39,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.Transactions)
             {
                 <tr>
                     <td>@item.Id</td>
@@ -32,15 +47,45 @@
                     <td>@item.Amount</td>
                     <td>@item.DestinationFirstName @item.DestinationLastName</td>
                     <td>
-                        <a href="~/Transaction/Details/@ViewData["accId"]/@item.Id">
-                            <input value="Details" class="btn btn-primary" />
+                        <a href="~/Transaction/Details/@ViewBag.accId/@item.Id">
+                            <input value="Details" class="btn btn-outline-secondary" />
                         </a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+    <div class="dataTables_paginate">
+        <ul class="pagination">
+            <li class="page-item previous">
+                <a href="~/Transaction/Index/@ViewBag.accId?PageNumber=@(ViewBag.Previous)&PageSize=8" class="page-link">
+                    Previous
+                </a>
+            </li>
+            @for (int i = 0; i < numberOfPages; ++i)
+            {
+                if (ViewBag.CurrentPage == (i + 1)) {
+                    <li class="page-item active">
+                        <a href="~/Transaction/Index/@ViewBag.accId?PageNumber=@(i+1)&PageSize=8" class="page-link">
+                            @(i + 1)
+                        </a>
+                    </li>
+                } else {
+                    <li class="page-item">
+                        <a href="~/Transaction/Index/@ViewBag.accId?PageNumber=@(i+1)&PageSize=8" class="page-link">
+                            @(i + 1)
+                        </a>
+                    </li>
+                }
+            }
+            <li class="page-item">
+                <a href="~/Transaction/Index/@ViewBag.accId?PageNumber=@(ViewBag.Next)&PageSize=8" class="page-link">
+                    Next
+                </a>
+            </li>
+        </ul>
+    </div>
     <div class="p-2">
-        <a href="~/Account/Index/@ViewData["accId"]"><input class="btn btn-secondary p-1" value="Back to Account"/></a>
+        <a href="~/Account/Index/@ViewBag.accId"><input class="btn btn-secondary p-1" value="Back to Account" /></a>
     </div>
 </div>

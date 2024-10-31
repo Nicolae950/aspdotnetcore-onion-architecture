@@ -21,6 +21,22 @@ public class AccountController : Controller
     }
 
     [HttpGet("{id}")]
+    public async Task<IActionResult> GetAllAccountsAsync(Guid id)
+    {
+        try
+        {
+            var accounts = await _accountService.GetAllAccountsAsync(id);
+            var accountsVM = accounts
+                .Select(x => new MinimizedAccountVM(x));
+
+            return Ok(new StatusVM<IEnumerable<MinimizedAccountVM>>(accountsVM));
+        }catch(Exception ex)
+        {
+            return BadRequest(new StatusVM<IEnumerable<MinimizedAccountVM>>(ex.Message));
+        }
+    }
+
+    [HttpGet("{id}")]
     public async Task<IActionResult> DetailsAsync(Guid id)
     {
         try
@@ -49,12 +65,29 @@ public class AccountController : Controller
         }
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateAccountAsync([FromBody] AccountDTO accountDTO)
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetReportAsync(Guid id, [FromQuery] DateTime From, [FromQuery] DateTime To)
     {
         try
         {
-            var account = accountDTO.MapDTOToAccount();
+            var account = new AccountTransactionsVM(
+                await _accountService.GetAccountDetailsAsync(id),
+                await _transactionService.GetTransactionsByTimeAsync(id, From, To));
+
+            return Ok(new StatusVM<AccountTransactionsVM>(account));
+        }
+        catch(Exception ex)
+        {
+            return BadRequest(new StatusVM<AccountTransactionsVM>(ex.Message));
+        }
+    }
+
+    [HttpPost("{id}")]
+    public async Task<IActionResult> CreateAccountAsync(Guid id, [FromBody] AccountDTO accountDTO)
+    {
+        try
+        {
+            var account = accountDTO.MapDTOToAccount(id);
             var createdAccount = new DetalizedAccountVM(await _accountService.AddAccountAsync(account));
             return Ok(new StatusVM<DetalizedAccountVM>(createdAccount));
         }catch(Exception ex)

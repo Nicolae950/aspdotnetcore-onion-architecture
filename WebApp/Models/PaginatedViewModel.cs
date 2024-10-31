@@ -1,8 +1,9 @@
-﻿namespace WebApp.Models
+﻿using WebApp.Models.Transaction;
+
+namespace WebApp.Models;
+
+public class PaginatedViewModel
 {
-    public class PaginatedViewModel
-    {
-        public int PageNumber { get; set; }
-        public int PageSize { get; set; } = 4;
-    }
+    public IEnumerable<TransactionViewModel> Transactions { get; set; }
+    public int TotalTransactions { get; set; }
 }

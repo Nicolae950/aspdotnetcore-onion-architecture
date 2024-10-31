@@ -26,7 +26,12 @@ public class AccountService : IAccountService
         _transactionRepository = transactionRepository;
         accountHelper = new AccountHelper();
     }
-        
+
+    public async Task<IEnumerable<Account>> GetAllAccountsAsync(Guid id)
+    {
+        return await _accountRepository.GetAllAccountsAsync(id);
+    }
+
     public async Task<Account> AddAccountAsync(Account account)
     {
         var newAcc = await _accountRepository.CreateAsync(account);
@@ -66,6 +71,8 @@ public class AccountService : IAccountService
 
         await _accountRepository.SaveAsync();
     }
+
+    
 
     public async Task<Account> GetAccountDetailsAsync(Guid? id)
     {

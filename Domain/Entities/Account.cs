@@ -19,6 +19,8 @@ public class Account : FullAuditableEntity
     public ICollection<Transaction> TransactionsAsSource { get; private set; }
     public ICollection<Transaction> TransactionsAsDestination { get; private set; }
     public AccountStatus Status { get; private set; }
+    public Guid UserId { get; private set; }
+    //public User User { get; private set; }
 
     public Account()
     { }
@@ -28,13 +30,14 @@ public class Account : FullAuditableEntity
         FirstName = firstName;
         LastName = lastName;
     }
-    public Account(string firstName, string lastName)
+    public Account(string firstName, string lastName, Guid userId)
     {
         Id = Guid.NewGuid();
         FirstName = firstName;
         LastName = lastName;
         Balance = 0;
         Status = AccountStatus.None;
+        UserId = userId;
     }
 
     public void DoTransaction(Transaction transaction)

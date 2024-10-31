@@ -1,4 +1,19 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿var fromDatePicker = document.getElementById("from-report-date");
+var toDatePicker = document.getElementById("to-report-date");
+var reportActionLink = document.getElementById("report-link");
+var reportButton = document.getElementById("report-button");
 
-// Write your JavaScript code.
+var hrefOriginalString = reportActionLink.getAttribute("href");
+
+reportActionLink.onload = function () {
+    reportActionLink.setAttribute("href", hrefOriginalString + "?From=" + fromDatePicker.value + "&To=" + toDatePicker.value);
+}
+
+fromDatePicker.onchange = function () {
+    reportActionLink.setAttribute("href", hrefOriginalString + "?From=" + fromDatePicker.value + "&To=" + toDatePicker.value);
+}
+
+toDatePicker.onchange = function () {
+    reportActionLink.setAttribute("href", hrefOriginalString + "?From=" + fromDatePicker.value + "&To=" + toDatePicker.value);
+}
+ 

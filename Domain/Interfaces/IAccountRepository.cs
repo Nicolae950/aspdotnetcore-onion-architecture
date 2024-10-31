@@ -11,6 +11,7 @@ namespace Domain.Interfaces;
 
 public interface IAccountRepository : IFullAuditableRepository<Account>
 {
+    Task<IEnumerable<Account>> GetAllAccountsAsync(Guid id);
     Task<Account> GetAccountAsync(Guid? id);
     Task InactivateEntityAsync(Account account);
 }

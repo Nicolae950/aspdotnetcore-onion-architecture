@@ -1,25 +1,52 @@
-﻿@using WebApp.DTOs
+﻿@{
+    Layout = null;
+}
+@using WebApp.DTOs
 @model UserDTO;
-
-<h3>Login</h3>
-
-<div class="form-control">
-    <div class="col-md-4">
-        <form asp-action="Login">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Email" class="control-label p-1"></label>
-                <input asp-for="Email" class="form-control p-1" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+        <title> Log In </title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&amp;display=fallback" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css"/>
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/WebApp.styles.css" asp-append-version="true" />
+    </head>
+    <body class="login-page" style="min-height: 496.781px;">
+        <div>
+            <div class="card">
+                <div class="card-body login-card-body">
+                    <p class="login-box-msg"> Sign in to start your session </p>
+                    <form asp-action="Login">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group mb-3">
+                            <input asp-for="Email" class="form-control p-1" placeholder="Email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <input type="password" asp-for="Password" class="form-control p-1" placeholder="Password"/>
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                        <div class="row">
+                            <div class="col-7"></div>
+                            <div class="col-5">
+                                <button type="submit" class="btn btn-primary">
+                                    Sign In
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <p>
+                        <a href="" class="text-center"> Register a new membership</a>
+                    </p>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Password" class="control-label p-1"></label>
-                <input type="password" asp-for="Password" class="form-control p-1" />
-                <span asp-validation-for="Password" class="text-danger"></span>
-            </div>
-            <div class="form-group p-2">
-                <input type="submit" value="Login" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
-</div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </body>
+</html>

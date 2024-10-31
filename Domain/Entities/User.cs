@@ -12,6 +12,7 @@ namespace Domain.Entities
     {
         public string Email { get; private set; }
         public string Password { get; private set; }
+        //public ICollection<Account> Accounts { get; private set; }
 
         public User() { }
 

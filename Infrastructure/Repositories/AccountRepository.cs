@@ -19,10 +19,11 @@ public class AccountRepository : FullAuditableRepository<Account>, IAccountRepos
         : base(context)
     { }
 
-    public async Task<IEnumerable<Account>> GetAllAccountsAsync()
+    public async Task<IEnumerable<Account>> GetAllAccountsAsync(Guid id)
     {
         var accounts = await _dbSet
-            .Where(a => a.Status != AccountStatus.Inactive && a.IsDeleted == false)
+            .Where(a => a.Status != AccountStatus.Inactive && a.IsDeleted == false && a.UserId == id)
+            .AsNoTracking()
             .ToListAsync();
         return accounts;
     }

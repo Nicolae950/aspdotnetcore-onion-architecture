@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.DTOs;
 using WebAPI.ViewModels;
@@ -11,10 +12,11 @@ public class UserController : Controller
 {
     private readonly IUserService _userService;
     private readonly ITokenService _tokenService;
-    public UserController(IUserService userService, ITokenService tokenService)
+    public UserController(IUserService userService, ITokenService tokenService, IRecurringJobManager recurringJobManager)
     {
         _userService = userService;
         _tokenService = tokenService;
+        recurringJobManager.AddOrUpdate("user-job", () => Console.WriteLine("user time"), Cron.Minutely);
     }
 
     [HttpPost]

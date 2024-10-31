@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Net.Http.Headers;
 using WebApp.DTOs;
+using WebApp.Helper;
 using WebApp.Models;
 using WebApp.Models.Transaction;
 
@@ -15,22 +16,24 @@ public class TransactionController : Controller
         _client.BaseAddress = new Uri("https://localhost:44316/api/Transaction");
     }
     [HttpGet]
-    public async Task<IActionResult> IndexAsync(Guid accId, [FromQuery]PaginatedViewModel paginated)
+    public async Task<IActionResult> IndexAsync(Guid accId, [FromQuery]PaginatedDTO paginated)
     {
-        var transactions = new ApiResponseViewModel<List<TransactionViewModel>>();
+        var transactions = new ApiResponseViewModel<PaginatedViewModel>();
 
-        var token = "";
-        HttpContext.Request.Cookies.TryGetValue("token", out token);
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
 
         var path = $"/GetAllTransactions/{accId}?PageNumber={paginated.PageNumber}&PageSize={paginated.PageSize}";
         HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + path);
 
         if (response.IsSuccessStatusCode)
         {
-            transactions = await response.Content.ReadAsAsync<ApiResponseViewModel<List<TransactionViewModel>>>();
+            transactions = await response.Content.ReadAsAsync<ApiResponseViewModel<PaginatedViewModel>>();
         }
-        ViewData["accId"] = accId;
+
+        ViewBag.accId = accId;
+        ViewBag.CurrentPage = paginated.PageNumber;
+        ViewBag.Previous = paginated.PageNumber > 2 ? paginated.PageNumber - 1 : paginated.PageNumber;
+        ViewBag.Next = paginated.PageNumber < transactions.Data.TotalTransactions/paginated.PageSize ? paginated.PageNumber + 1 : paginated.PageNumber;
         return View(transactions.Data);
     }
 
@@ -44,9 +47,7 @@ public class TransactionController : Controller
     [HttpPost]
     public async Task<IActionResult> DepositAsync(Guid accId, TransactionDTO transactionDTO)
     {
-        var token = "";
-        HttpContext.Request.Cookies.TryGetValue("token", out token);
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
 
         HttpResponseMessage response = await _client.PostAsJsonAsync(_client.BaseAddress //serializarea
             + $"/CreateDeposit/{accId}", transactionDTO);
@@ -65,9 +66,7 @@ public class TransactionController : Controller
     [HttpPost]
     public async Task<IActionResult> WithdrawAsync(Guid accId, TransactionDTO transactionDTO)
     {
-        var token = "";
-        HttpContext.Request.Cookies.TryGetValue("token", out token);
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
 
         HttpResponseMessage response = await _client.PostAsJsonAsync(_client.BaseAddress //serializarea
             + $"/CreateWithdrawal/{accId}", transactionDTO);
@@ -86,9 +85,7 @@ public class TransactionController : Controller
     [HttpPost]
     public async Task<IActionResult> TransferAsync(Guid accId, TransactionDTO transactionDTO)
     {
-        var token = "";
-        HttpContext.Request.Cookies.TryGetValue("token", out token);
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
 
         HttpResponseMessage response = await _client.PostAsJsonAsync(_client.BaseAddress //serializarea
             + $"/CreateTransfer/{accId}", transactionDTO);
@@ -100,9 +97,7 @@ public class TransactionController : Controller
     [HttpGet]
     public async Task<IActionResult> DetailsAsync(Guid accId, Guid tranId)
     {
-        var token = "";
-        HttpContext.Request.Cookies.TryGetValue("token", out token);
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
 
         var transaction = new ApiResponseViewModel<TransactionDetailsViewModel>();
         var path = $"/GetTransactionDetails/{accId}/{tranId}";
@@ -117,9 +112,7 @@ public class TransactionController : Controller
     [HttpPost]
     public async Task<IActionResult> UpdateAsync(Guid accId, TransactionDetailsViewModel transaction)
     {
-        var token = "";
-        HttpContext.Request.Cookies.TryGetValue("token", out token);
-        _client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
 
         HttpResponseMessage response = await _client.PutAsJsonAsync(_client.BaseAddress +
             $"/UpdateTransfer/{accId}/{transaction.Id}", transaction);

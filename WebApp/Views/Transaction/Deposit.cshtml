@@ -1,35 +1,52 @@
 ﻿@using WebApp.DTOs;
 @model TransactionDTO;
 
-<h3>Deposit</h3>
-
-<div class="row">
-    <div class="col-md-4">
+<div class="row card card-info">
+    <div class="card-header">
+        <h3 class="card-title text-white">
+            <b>Deposit</b>
+        </h3>
+    </div>
+    <div class="card-body col-12">
         <form asp-action="Deposit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="OperationType" class="control-label p-1"></label>
-                <input asp-for="OperationType" class="form-control p-1" value="Deposit" disabled/>
+
+            <label asp-for="OperationType" class="control-label p-1"></label>
+            <div class="input-group p-1">
+                
+                <input asp-for="OperationType" class="form-control rounded-end-2" value="Deposit" disabled/>
                 <span asp-validation-for="OperationType" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Amount" class="control-label p-1"></label>
-                <input asp-for="Amount" class="form-control p-1" />
+
+            <label asp-for="Amount" class="control-label p-1"></label>
+            <div class="input-group p-1">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">$</span>
+                </div>
+                <input asp-for="Amount" class="form-control rounded-end-2" />
                 <span asp-validation-for="Amount" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label p-1"></label>
-                <input asp-for="Description" class="form-control p-1" />
+
+            <label asp-for="Description" class="control-label p-1"></label>
+            <div class="input-group p-1">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">A</span>
+                </div>
+                <input asp-for="Description" class="form-control rounded-end-2" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="DestinationAccountId" class="control-label p-1"></label>
-                <input asp-for="DestinationAccountId" placeholder="For Transfer" class="form-control p-1" disabled/>
+
+            <label asp-for="DestinationAccountId" class="control-label p-1"></label>
+            <div class="input-group p-1">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">&rArr;</span>
+                </div>
+                <input asp-for="DestinationAccountId" placeholder="For Transfer" class="form-control rounded-end-2" disabled/>
                 <span asp-validation-for="DestinationAccountId" class="text-danger"></span>
             </div>
             <div class="form-group p-2">
                 <a href="~/Account/Index/@ViewData["accId"]"><input class="btn btn-secondary" value="Back To Account"/></a>
-                <input type="submit" value="Deposit" class="btn btn-primary" />
+                <button type="submit" class="btn btn-info text-white"><b>Deposit</b></button>
             </div>
         </form>
     </div>
