@@ -47,6 +47,9 @@ public class ReportService : IReportService
             var fromDate = DateTime.Now.Subtract(TimeSpan.FromHours(1D));
             var toDate = DateTime.Now;
             await _reportRepository.CreateAsync(new Report(account.Id, fromDate, toDate));
+            var count = await _reportRepository.GetReportsCountAsync(account.Id);
+            if(count > 2)
+                await _reportRepository.HardDeleteAsync(account.Id);
             await _reportRepository.SaveAsync();
         }
     }

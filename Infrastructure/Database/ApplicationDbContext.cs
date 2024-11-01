@@ -43,8 +43,12 @@ public class ApplicationDbContext : DbContext
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        var req = _httpContextAccessor.HttpContext.Request.Path.Value.Trim().Split('/');
-        var id = req.Length > 4 ? Guid.Parse(req[4].ToUpper()) : Guid.Empty;
+        var req = _httpContextAccessor.HttpContext != null ? _httpContextAccessor.HttpContext.Request.Path.Value.Trim().Split('/') : null;
+        Guid id = Guid.Empty;
+        if (req != null)
+        {
+            id = req.Length > 4 ? Guid.Parse(req[4].ToUpper()) : Guid.Empty;
+        }
 
         foreach (var account in ChangeTracker.Entries<Account>().AsEnumerable())
         {

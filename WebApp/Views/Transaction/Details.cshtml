@@ -2,13 +2,15 @@
 @model TransactionDetailsViewModel;
 @{
     var data = Model;
+    var pageNumber = TempData["PageNumber"] == null ? 1 : TempData["PageNumber"];
+    var pageSize = TempData["PageSize"] == null ? 8 : TempData["PageSize"];
 }
 
 <h3>Details</h3>
 
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Update">
+<form asp-action="Update">
+    <div class="row">
+        <div class="col-6">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Id" class="control-label p-1"></label>
@@ -17,7 +19,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="SourceAccountId" class="control-label p-1"></label>
-                <input asp-for="SourceAccountId" class="form-control p-1" value="@data.SourceAccountId"/>
+                <input asp-for="SourceAccountId" class="form-control p-1" value="@data.SourceAccountId" />
                 <span asp-validation-for="SourceAccountId" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -45,12 +47,14 @@
                 <input asp-for="OperationType" class="form-control p-1" value="@data.OperationType" />
                 <span asp-validation-for="OperationType" class="text-danger"></span>
             </div>
+        </div>
+        <div class="col-6">
             <div class="form-group">
                 <label asp-for="Description" class="control-label p-1"></label>
                 <input asp-for="Description" class="form-control p-1" value="@data.Description" />
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
-            @if(data.DestinationAccountId != null)
+            @if (data.DestinationAccountId != null)
             {
                 <div class="form-group">
                     <label asp-for="DestinationAccountId" class="control-label p-1"></label>
@@ -72,26 +76,30 @@
             {
                 <div class="form-group">
                     <label asp-for="DestinationAccountId" class="control-label p-1"></label>
-                    <input asp-for="DestinationAccountId" class="form-control p-1" value="-" disabled/>
+                    <input asp-for="DestinationAccountId" class="form-control p-1" value="-" disabled />
                     <span asp-validation-for="DestinationAccountId" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="DestinationFirstName" class="control-label p-1"></label>
-                    <input asp-for="DestinationFirstName" class="form-control p-1" value="-" disabled/>
+                    <input asp-for="DestinationFirstName" class="form-control p-1" value="-" disabled />
                     <span asp-validation-for="DestinationFirstName" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label asp-for="DestinationLastName" class="control-label p-1"></label>
-                    <input asp-for="DestinationLastName" class="form-control p-1" value="-" disabled/>
+                    <input asp-for="DestinationLastName" class="form-control p-1" value="-" disabled />
                     <span asp-validation-for="DestinationLastName" class="text-danger"></span>
                 </div>
             }
-            
+
             <div class="form-group p-2">
-                <a href="~/Transaction/Index/@ViewData["accId"]"><input value="Back" class="btn btn-secondary p-1" /></a>
-                <input id="update-reject-button" type="submit" value="Reject Transfer" formaction="/Transaction/Update/@ViewData["accId"]" class="btn btn-primary p-1" />
-                <input id="update-accept-button" type="submit" value="Accept Transfer" formaction="/Transaction/Update/@ViewData["accId"]" class="btn btn-primary p-1" />
+                <a href="~/Transaction/Index/@ViewData["accId"]?PageNumber=@pageNumber&PageSize=@pageSize"><input type="button" value="Back To Transactions" class="btn btn-secondary p-1 text-bolded" /></a>
+                <button id="update-reject-button" type="submit" formaction="/Transaction/Update/@ViewData["accId"]" class="btn btn-info p-1 text-white">
+                    <b>Reject Transfer</b>
+                </button>
+                <button id="update-accept-button" type="submit" formaction="/Transaction/Update/@ViewData["accId"]" class="btn btn-info p-1 text-white">
+                    <b>Accept Transfer</b>
+                </button>
             </div>
-        </form>
+        </div>
     </div>
-</div>
+</form>

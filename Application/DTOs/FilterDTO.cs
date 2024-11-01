@@ -14,6 +14,8 @@ public class FilterDTO
     public decimal? MaxAmount { get; set; } = null;
     public string? Description { get; set; } = null; // if desc will contain something
 
+    public string? OrderBy {  get; set; } = null;
+
     public int PageNumber { get; set; }
     public int PageSize { get; set; }
 

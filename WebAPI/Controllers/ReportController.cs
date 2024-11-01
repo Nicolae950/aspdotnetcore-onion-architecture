@@ -13,12 +13,10 @@ public class ReportController : Controller
     public ReportController(IReportService reportService, IRecurringJobManager recurringJob)
     {
         _reportService = reportService;
-        recurringJob.AddOrUpdate("reportsJob", () => Console.WriteLine("report time"), Cron.Minutely);
-        //RecurringJob.AddOrUpdate("reportsJob", () => _reportService.CreateReportsForAllAsync(), Cron.Minutely);
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetAllReportForAccountAsync(Guid id)
+    public async Task<IActionResult> GetAllReportsForAccountAsync(Guid id)
     {
         try
         {
@@ -30,10 +28,5 @@ public class ReportController : Controller
         {
             return BadRequest(new StatusVM<IEnumerable<ReportVM>>(ex.Message));
         }
-    }
-
-    public void StartingReportJob(IRecurringJobManager recurringJob)
-    {
-        recurringJob.AddOrUpdate("report-job", () => Console.WriteLine("Report Time"), Cron.Minutely);
     }
 }

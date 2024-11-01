@@ -30,10 +30,13 @@ public class TransactionController : Controller
             transactions = await response.Content.ReadAsAsync<ApiResponseViewModel<PaginatedViewModel>>();
         }
 
+        TempData["PageNumber"] = paginated.PageNumber;
+        TempData["PageSize"] = paginated.PageSize;
+
         ViewBag.accId = accId;
         ViewBag.CurrentPage = paginated.PageNumber;
-        ViewBag.Previous = paginated.PageNumber > 2 ? paginated.PageNumber - 1 : paginated.PageNumber;
-        ViewBag.Next = paginated.PageNumber < transactions.Data.TotalTransactions/paginated.PageSize ? paginated.PageNumber + 1 : paginated.PageNumber;
+        ViewBag.Previous = paginated.PageNumber > 1 ? paginated.PageNumber - 1 : paginated.PageNumber;
+        ViewBag.Next = paginated.PageNumber <= transactions.Data.TotalTransactions/paginated.PageSize ? paginated.PageNumber + 1 : paginated.PageNumber;
         return View(transactions.Data);
     }
 
@@ -116,8 +119,16 @@ public class TransactionController : Controller
 
         HttpResponseMessage response = await _client.PutAsJsonAsync(_client.BaseAddress +
             $"/UpdateTransfer/{accId}/{transaction.Id}", transaction);
-        response.EnsureSuccessStatusCode();
 
-        return RedirectToAction("Details", new { id = transaction.DestinationAccountId, tranId = transaction.Id});
+        var api_response = new ApiResponseViewModel<TransactionDetailsViewModel>();
+
+        api_response = await response.Content.ReadAsAsync<ApiResponseViewModel<TransactionDetailsViewModel>>();
+
+        //if (response.IsSuccessStatusCode)
+        //{
+        //    api_response = await response.Content.ReadAsAsync<ApiResponseViewModel<TransactionDetailsViewModel>>();
+        //}
+        TempData["message"] = api_response.Message;
+        return RedirectToAction("Details", "Transaction", new { accId = transaction.DestinationAccountId, tranId = transaction.Id });
     }
 }

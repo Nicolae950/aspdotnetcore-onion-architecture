@@ -1,4 +1,4 @@
-html {
+﻿html {
   font-size: 14px;
 }
 
@@ -48,7 +48,8 @@ body {
 }*/
 
 .div-hover:hover{
-    background-color:lightgray;
+    background-color : lightgray;
+    color : white;
 }
 
 div.dataTables_wrapper div.dataTables_paginate {
@@ -71,4 +72,110 @@ a {
 
 .text-bolded {
     font-weight: bold !important;
+}
+
+
+.toast {
+    -ms-flex-preferred-size: 350px;
+    flex-basis: 350px;
+    max-width: 350px;
+    font-size: .875rem;
+    background-color: rgba(255, 255, 255, .85);
+    background-clip: padding-box;
+    border: 1px solid rgba(0, 0, 0, .1);
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .1);
+    opacity: 0;
+    border-radius: .25rem;
+}
+
+.toast.bg-success {
+    background-color: rgba(40, 167, 69, .9) !important;
+}
+
+.toast.show {
+    display: block;
+    opacity: 1;
+}
+
+.fade {
+    transition: opacity .15s linear;
+}
+
+
+.table:not(.table-dark) {
+    color: inherit;
+}
+
+.table thead th {
+    vertical-align: bottom;
+    border-bottom: 2px solid #dee2e6;
+}
+
+table.dataTable td, table.dataTable th {
+    -webkit-box-sizing: content-box;
+    box-sizing: content-box;
+}
+
+.table-bordered td, .table-bordered th {
+    border: 1px solid #dee2e6;
+}
+
+table.table-bordered.dataTable {
+    border-right-width: 0;
+}
+
+.table-bordered thead td, .table-bordered thead th {
+    border-bottom-width: 2px;
+}
+
+table.table-bordered.dataTable th, table.table-bordered.dataTable td {
+    border-left-width: 0;
+}
+
+table.dataTable {
+    clear: both;
+    margin-top: 6px !important;
+    margin-bottom: 6px !important;
+    max-width: none !important;
+    border-collapse: separate !important;
+    border-spacing: 0;
+}
+
+table.dataTable > thead .sorting, table.dataTable > thead .sorting_asc, table.dataTable > thead .sorting_desc, table.dataTable > thead .sorting_asc_disabled, table.dataTable > thead .sorting_desc_disabled {
+    cursor: pointer;
+    position: relative;
+}
+
+*, ::after, ::before {
+    box-sizing: border-box;
+}
+
+table.dataTable > thead .sorting_asc:before, table.dataTable > thead .sorting_desc:after {
+    opacity: 1;
+}
+
+table.dataTable > thead .sorting:before, table.dataTable > thead .sorting_asc:before, table.dataTable > thead .sorting_desc:before, table.dataTable > thead .sorting_asc_disabled:before, table.dataTable > thead .sorting_desc_disabled:before {
+    right: 1em;
+    content: "↑";
+}
+
+table.dataTable > thead .sorting, table.dataTable > thead .sorting_asc, table.dataTable > thead .sorting_desc, table.dataTable > thead .sorting_asc_disabled, table.dataTable > thead .sorting_desc_disabled {
+    cursor: pointer;
+    position: relative;
+}
+
+table.dataTable > thead .sorting:before, table.dataTable > thead .sorting:after, table.dataTable > thead .sorting_asc:before, table.dataTable > thead .sorting_asc:after, table.dataTable > thead .sorting_desc:before, table.dataTable > thead .sorting_desc:after, table.dataTable > thead .sorting_asc_disabled:before, table.dataTable > thead .sorting_asc_disabled:after, table.dataTable > thead .sorting_desc_disabled:before, table.dataTable > thead .sorting_desc_disabled:after {
+    position: absolute;
+    bottom: .9em;
+    display: block;
+    opacity: .3;
+}
+
+table.dataTable > thead .sorting:after, table.dataTable > thead .sorting_asc:after, table.dataTable > thead .sorting_desc:after, table.dataTable > thead .sorting_asc_disabled:after, table.dataTable > thead .sorting_desc_disabled:after {
+    right: .5em;
+    content: "↓";
+}
+
+table.dataTable > thead > tr > th:not(.sorting_disabled), table.dataTable > thead > tr > td:not(.sorting_disabled) {
+    padding-right: 30px;
 }

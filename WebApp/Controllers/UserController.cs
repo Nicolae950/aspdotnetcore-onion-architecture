@@ -43,5 +43,12 @@ namespace WebApp.Controllers
 
             //Index -> GetAllAccounts / Account -> controller / object = Data.Token
         }
+
+        [HttpGet]
+        public async Task<IActionResult> LogoutAsync()
+        {
+            HttpContext.Response.Cookies.Delete("token");
+            return RedirectToAction("Login", "User");
+        }
     }
 }

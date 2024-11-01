@@ -4,19 +4,8 @@ using Application.Interfaces;
 using Application.ViewModels;
 using Domain.Entities;
 using Domain.Enums;
-using Domain.Exceptions;
 using Domain.Interfaces;
-using Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Identity.Client;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Security.Principal;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.Services;
 

@@ -20,41 +20,45 @@
 <h3>All Transactions</h3>
 
 <div>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Transaction Id
-                </th>
-                <th>
-                    Operation Type
-                </th>
-                <th>
-                    Amount
-                </th>
-                <th>
-                    Destiantion Name
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.Transactions)
-            {
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.OperationType</td>
-                    <td>@item.Amount</td>
-                    <td>@item.DestinationFirstName @item.DestinationLastName</td>
-                    <td>
-                        <a href="~/Transaction/Details/@ViewBag.accId/@item.Id">
-                            <input value="Details" class="btn btn-outline-secondary" />
-                        </a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-bordered table-hover dataTable">
+                <thead>
+                    <tr>
+                        <th>
+                            Transaction Id
+                        </th>
+                        <th class="" aria-controls="transactionTable" rowspan="1" colspan="1" aria-sort="descending">
+                            Operation Type
+                        </th>
+                        <th class="">
+                            Amount
+                        </th>
+                        <th>
+                            Destiantion Name
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.Transactions)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.OperationType</td>
+                            <td>@item.Amount</td>
+                            <td>@item.DestinationFirstName @item.DestinationLastName</td>
+                            <td>
+                                <a href="~/Transaction/Details/@ViewBag.accId/@item.Id">
+                                    <input value="Details" class="btn btn-outline-secondary" />
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
     <div class="dataTables_paginate">
         <ul class="pagination">
             <li class="page-item previous">

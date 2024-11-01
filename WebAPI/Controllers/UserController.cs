@@ -16,7 +16,6 @@ public class UserController : Controller
     {
         _userService = userService;
         _tokenService = tokenService;
-        recurringJobManager.AddOrUpdate("user-job", () => Console.WriteLine("user time"), Cron.Minutely);
     }
 
     [HttpPost]

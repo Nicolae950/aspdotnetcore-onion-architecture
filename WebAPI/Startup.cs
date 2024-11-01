@@ -29,11 +29,6 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddMvc(mvcOpt =>
-        {
-            mvcOpt.EnableEndpointRouting = false;
-        });
-
         services.AddControllers();
 
         services.AddEndpointsApiExplorer();
@@ -93,6 +88,13 @@ public class Startup
             .UseRecommendedSerializerSettings()
             .UseSqlServerStorage(@"Server=(localdb)\mssqllocaldb;Database=BankWebAPI;Trusted_Connection=True;Integrated Security=SSPI;")
             );
+
+        services.AddHangfireServer();
+        
+        services.AddMvc(mvcOpt =>
+        {
+            mvcOpt.EnableEndpointRouting = false;
+        });
     }
 
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IRecurringJobManager recurringJobManager)
@@ -113,9 +115,7 @@ public class Startup
         //    endpoints.MapHangfireDashboard();
         //});
 
-        
-
-        //recurringJobManager.AddOrUpdate("programJob", () => Console.WriteLine("Job Time"), Cron.Minutely);
+        recurringJobManager.AddOrUpdate<IReportService>("program-Job", report => report.CreateReportsForAllAsync(), Cron.Hourly);
 
         app.UseMvc();
     }
