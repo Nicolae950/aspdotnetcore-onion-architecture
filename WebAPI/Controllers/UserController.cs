@@ -3,6 +3,7 @@ using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.DTOs;
 using WebAPI.ViewModels;
+using WebAPI.ViewModels.UserModels;
 
 namespace WebAPI.Controllers;
 

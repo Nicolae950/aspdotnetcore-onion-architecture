@@ -39,7 +39,7 @@ public class TransactionService : ITransactionService
 
         return await transactions
             .OrderByDescending(t => t.CreatedAt)
-            .Take(4)
+            .Take(5)
             .ToListAsync();
     }
 
@@ -52,7 +52,7 @@ public class TransactionService : ITransactionService
         var transactions = await _transactionRepository.GetAllTransactionsForAccountAsync(accountId);
         return await transactions
             .OrderByDescending(t => t.CreatedAt)
-            .Where(t => t.CreatedAt > From && t.CreatedAt < To)
+            .Where(t => t.CreatedAt >= From && t.CreatedAt <= To)
             .ToListAsync();
     }
 

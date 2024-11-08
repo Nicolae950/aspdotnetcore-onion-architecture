@@ -1,5 +1,5 @@
-﻿@using WebApp.Models.Account
-@model IEnumerable<MinimizedAccountViewModel>;
+﻿@using WebApp.Models.User
+@model DetalizedUserViewModel;
 
 <div>
     <h5>
@@ -7,30 +7,42 @@
     </h5>
 </div>
 <div class="row">
-    <div class="col-3">
-        <div class="row p-2">
-            <div><b>Email:</b></div>
-            <div>test.email@email.com</div>
+    <div class="col-md-4">
+        <div class="card card-primary card-outline">
+            <div class="card-body p-2">
+                <strong>Email</strong>
+                <p>@Model.Email</p>
+                <hr />
+                <strong>Created At</strong>
+                <p>@Model.CreatedAt</p>
+            </div>
         </div>
-        <div class="row p-2">
-            <div> <b>Created At :</b></div>
-            <div> 01/01/01/01:01:01 AM</div>
+        <div>
+            <a href="~/Account/Create/@Model.Id">
+                <input type="button" value="Create Account" class="btn btn-outline-secondary"/>
+            </a>
         </div>
     </div>
-    <div class="col-1" style="border-left:2px solid; color:gray;"></div>
+    @* <div class="col-1" style="border-left:2px solid; color:gray;"></div> *@
     <div class="align-content-center container col-8">
-        @foreach (var item in Model)
+        @foreach (var item in Model.Accounts)
         {
             <a href="~/Account/Index/@item.Id" style="text-decoration:none;" class="link-underline-opacity-0">
-                <div class="row border border-2 rounded-2 align-content-center m-2 text-center text-dark div-hover">
-                    <div class="col p-3"><b>@item.Id</b></div>
-                    <div class="col p-3"><b>@item.Balance</b></div>
-                    <div class="col p-3"><b>@item.Status</b></div>
+                <div class="card bg-light d-flex flex-fill div-hover">
+                    <div class="card-header text-muted border-bottom-0">
+                        <b>@item.Id</b>
+                    </div>
+                    <div class="card-body p-2 row">
+                        <h2 class="lead col-md-4">@item.FirstName @item.LastName</h2>
+                        <p class="text-muted text-sm-center col-md-4">@item.Balance $</p>
+                        <p class="text-muted text-sm-center col-md-4">@item.Status</p>
+                    </div>
                 </div>
             </a>
         }
     </div>
 </div>
+<hr />
 <div class="row">
     <div class="col-md-2">
         <a href="~/User/Logout">

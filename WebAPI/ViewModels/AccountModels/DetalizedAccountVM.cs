@@ -1,7 +1,7 @@
 ﻿using Domain.Entities;
 using Domain.Enums;
 
-namespace WebAPI.ViewModels;
+namespace WebAPI.ViewModels.AccountModels;
 
 public class DetalizedAccountVM
 {

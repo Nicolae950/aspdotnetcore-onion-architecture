@@ -14,8 +14,16 @@
             Data = data;
         }
 
+        public StatusVM(T data, string message)
+        {
+            Succes = true;
+            Message = message;
+            Data = data;
+        }
+
         public StatusVM(string message)
         {
+            Succes = false;
             Message = message;
         }
     }

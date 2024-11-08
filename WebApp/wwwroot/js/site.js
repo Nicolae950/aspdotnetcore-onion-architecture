@@ -1,60 +1,31 @@
-﻿var fromDatePicker = document.getElementById("from-report-date");
-var toDatePicker = document.getElementById("to-report-date");
-var reportActionLink = document.getElementById("report-link");
-var reportButton = document.getElementById("report-button");
+﻿
+//var operationSorting = document.getElementById("operation-sort");
+//var amountSorting = document.getElementById("amount-sort");
 
-var hrefOriginalString = reportActionLink.getAttribute("href");
+//operationSorting.click = function (event) {
+//    event.preventDefault();
+//    var filter = operationSorting.getAttribute("href");
+    
+//    if (filter.includes("OrderByDescending")) {
+//        filter.replace("OrderByDescending", "OrderBy");
+//    }
+//    if (filter.includes("OrderBy")) {
+//        filter.replace("OrderBy", "OrderByDescending");
+//    }
+//    operationSorting.setAttribute("href", filter);
+//    window.location.href = this.href;
+//}
 
-reportActionLink.onload = function () {
-    reportActionLink.setAttribute("href", hrefOriginalString + "?From=" + fromDatePicker.value + "&To=" + toDatePicker.value);
-}
+//amountSorting.click = function () {
+//    var filter = amountSorting.getAttribute("href");
 
-fromDatePicker.onchange = function () {
-    reportActionLink.setAttribute("href", hrefOriginalString + "?From=" + fromDatePicker.value + "&To=" + toDatePicker.value);
-}
+//    if (filter.includes("OrderByDescending")) {
+//        filter.replace("OrderByDescending", "OrderBy");
+//    }
+//    if (filter.includes("OrderBy")) {
+//        filter.replace("OrderBy", "OrderByDescending");
+//    }
 
-toDatePicker.onchange = function () {
-    reportActionLink.setAttribute("href", hrefOriginalString + "?From=" + fromDatePicker.value + "&To=" + toDatePicker.value);
-}
-
-var rejectButton = document.getElementById("update-reject-button");
-var acceptButton = document.getElementById("update-accept-button");
-var stateOfTransaction = document.getElementById("state-of-transaction");
-
-rejectButton.click = function () {
-    stateOfTransaction.value = "Rejected";
-}
-
-acceptButton.click = function () {
-    stateOfTransaction.value = "Done";
-}
-
-$('.toastsDefaultSuccess').onload(function () {
-    $(document).Toasts('create', {
-        class: 'bg-success',
-        title: 'Toast Title',
-        subtitle: 'Subtitle',
-        body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-    })
-});
-
-$('.toastsDefaultWarning').onload(function () {
-    $(document).Toasts('create', {
-        class: 'bg-warning',
-        title: 'Toast Title',
-        subtitle: 'Subtitle',
-        body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-    })
-});
-
-$(function () {
-    $('#transactionTable').DataTable({
-        "paging": true,
-        "lengthChange": false,
-        "searching": false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-    });
-});
+//    amountSorting.setAttribute("href", filter);
+//    window.location.href = this.href
+//}

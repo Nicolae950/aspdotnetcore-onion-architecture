@@ -21,36 +21,43 @@ body {
   margin-bottom: 60px;
 }
 
-/*.login-page, .register-page {
-    -ms-flex-align: center;
-    align-items: center;
-    background-color: #e9ecef;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-direction: column;
-    flex-direction: column;
-    height: 100vh;
-    -ms-flex-pack: center;
-    justify-content: center;
+
+
+.far {
+    font-weight: 400;
 }
 
-.login-card-body, .register-card-body {
-    background-color: #fff;
-    border-top: 0;
-    color: #666;
-    padding: 20px;
+.far {
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    line-height: 1;
 }
 
-.login-box-msg, .register-box-msg {
-    margin: 0;
-    padding: 0 20px 20px;
-    text-align: center;
-}*/
+.fa-envelope {
+    content: "&#x2139;";
+}
+
+
+td{
+    text-align:center;
+}
+
+th{
+    text-align:center;
+}
+
+
 
 .div-hover:hover{
-    background-color : lightgray;
-    color : white;
+    border-color : cornflowerblue !important;
 }
+
+
+
 
 div.dataTables_wrapper div.dataTables_paginate {
     margin: 0;
@@ -166,7 +173,7 @@ table.dataTable > thead .sorting, table.dataTable > thead .sorting_asc, table.da
 
 table.dataTable > thead .sorting:before, table.dataTable > thead .sorting:after, table.dataTable > thead .sorting_asc:before, table.dataTable > thead .sorting_asc:after, table.dataTable > thead .sorting_desc:before, table.dataTable > thead .sorting_desc:after, table.dataTable > thead .sorting_asc_disabled:before, table.dataTable > thead .sorting_asc_disabled:after, table.dataTable > thead .sorting_desc_disabled:before, table.dataTable > thead .sorting_desc_disabled:after {
     position: absolute;
-    bottom: .9em;
+    bottom: .5em;
     display: block;
     opacity: .3;
 }
@@ -178,4 +185,8 @@ table.dataTable > thead .sorting:after, table.dataTable > thead .sorting_asc:aft
 
 table.dataTable > thead > tr > th:not(.sorting_disabled), table.dataTable > thead > tr > td:not(.sorting_disabled) {
     padding-right: 30px;
+}
+
+.float-right {
+    float: right !important;
 }

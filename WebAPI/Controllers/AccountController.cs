@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.DTOs;
 using WebAPI.ViewModels;
+using WebAPI.ViewModels.AccountModels;
+using WebAPI.ViewModels.UserModels;
 
 namespace WebAPI.Controllers;
 
@@ -13,11 +15,13 @@ public class AccountController : Controller
 {
     private readonly IAccountService _accountService;
     private readonly ITransactionService _transactionService;
+    private readonly IUserService _userService;
 
-    public AccountController(IAccountService accountService, ITransactionService transactionService)
+    public AccountController(IAccountService accountService, ITransactionService transactionService, IUserService userService)
     {
         _accountService = accountService;
         _transactionService = transactionService;
+        _userService = userService;
     }
 
     [HttpGet("{id}")]
@@ -26,13 +30,13 @@ public class AccountController : Controller
         try
         {
             var accounts = await _accountService.GetAllAccountsAsync(id);
-            var accountsVM = accounts
-                .Select(x => new MinimizedAccountVM(x));
+            var user = await _userService.GetUserAsync(id);
+            var detalizedUserVM = new DetalizedUserVM(user, accounts);
 
-            return Ok(new StatusVM<IEnumerable<MinimizedAccountVM>>(accountsVM));
+            return Ok(new StatusVM<DetalizedUserVM>(detalizedUserVM));
         }catch(Exception ex)
         {
-            return BadRequest(new StatusVM<IEnumerable<MinimizedAccountVM>>(ex.Message));
+            return BadRequest(new StatusVM<DetalizedUserVM>(ex.Message));
         }
     }
 
@@ -60,23 +64,6 @@ public class AccountController : Controller
 
             return Ok(new StatusVM<AccountTransactionsVM>(account));
         }catch(Exception ex)
-        {
-            return BadRequest(new StatusVM<AccountTransactionsVM>(ex.Message));
-        }
-    }
-
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetReportAsync(Guid id, [FromQuery] DateTime From, [FromQuery] DateTime To)
-    {
-        try
-        {
-            var account = new AccountTransactionsVM(
-                await _accountService.GetAccountDetailsAsync(id),
-                await _transactionService.GetTransactionsByTimeAsync(id, From, To));
-
-            return Ok(new StatusVM<AccountTransactionsVM>(account));
-        }
-        catch(Exception ex)
         {
             return BadRequest(new StatusVM<AccountTransactionsVM>(ex.Message));
         }

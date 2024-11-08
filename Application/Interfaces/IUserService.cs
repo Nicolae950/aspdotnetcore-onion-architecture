@@ -11,5 +11,6 @@ namespace Application.Interfaces
     {
         Task RegisterAsync(User user);
         Task<User> LoginAsync(User user);
+        Task<User> GetUserAsync(Guid id);
     }
 }

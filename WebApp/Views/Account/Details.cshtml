@@ -2,44 +2,71 @@
 @model DetalizedAccountViewModel;
 
 <h3>Account Details</h3>
+<hr />
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6">
         <form asp-action="Update">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="p-2">
+                <strong class="control-label">ID</strong>
+            </div>
             <div class="form-group">
-                <label asp-for="Id" class="control-label p-1"></label>
-                <input asp-for="Id" class="form-control p-1" value="@Model.Id" />
+                <input asp-for="Id" class="form-control p-2" value="@Model.Id" disabled/>
                 <span asp-validation-for="Id" class="text-danger"></span>
             </div>
+
+            <div class="p-2">
+                <strong class="control-label">First Name</strong>
+            </div>
             <div class="form-group">
-                <label asp-for="FirstName" class="control-label p-1"></label>
-                <input asp-for="FirstName" class="form-control p-1" value="@Model.FirstName" />
+                <input asp-for="FirstName" class="form-control p-2" value="@Model.FirstName" disabled/>
                 <span asp-validation-for="FirstName" class="text-danger"></span>
             </div>
+
+            <div class="p-2">
+                <strong class="control-label">Last Name</strong>
+            </div>
             <div class="form-group">
-                <label asp-for="LastName" class="control-label p-1"></label>
-                <input asp-for="LastName" class="form-control p-1" value="@Model.LastName" />
+                <input asp-for="LastName" class="form-control p-2" value="@Model.LastName" disabled/>
                 <span asp-validation-for="LastName" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Balance" class="control-label p-1"></label>
-                <input asp-for="Balance" class="form-control p-1" value="@Model.Balance" />
+
+            <div class="p-2">
+                <strong class="control-label">Balance</strong>
+            </div>
+            <div class="input-group">
+                <input asp-for="Balance" class="form-control p-2" value="@Model.Balance" disabled/>
+                <div class="input-group-append">
+                    <span class="input-group-text rounded-end-2">$</span>
+                </div>
                 <span asp-validation-for="Balance" class="text-danger"></span>
             </div>
+
+            <div class="p-2">
+                <strong class="control-label">Created At</strong>
+            </div>
             <div class="form-group">
-                <label asp-for="CreatedAt" class="control-label p-1"></label>
-                <input asp-for="CreatedAt" class="form-control p-1" value="@Model.CreatedAt" />
+                <input asp-for="CreatedAt" class="form-control p-2" value="@Model.CreatedAt" disabled/>
                 <span asp-validation-for="CreatedAt" class="text-danger"></span>
             </div>
+
+            <div class="p-2">
+                <strong class="control-label">Account Status</strong>
+            </div>
             <div class="form-group">
-                <label asp-for="Status" class="control-label p-1"></label>
-                <input asp-for="Status" class="form-control p-1" value="@Model.Status" />
+                <input asp-for="Status" class="form-control p-2" value="@Model.Status" disabled/>
                 <span asp-validation-for="Status" class="text-danger"></span>
             </div>
+
             <div class="form-group p-2">
-                <a href="~/Account/Update/@Model.Id"><input value="Update" class="btn btn-primary p-1" /></a>
-                <a href="~/Account/Index/@Model.Id"><input value="Back" class="btn btn-secondary p-1" /></a>
+                <a href="~/Account/Index/@Model.Id" class="p-1">
+                    <input type="button" value="Back To Index" class="btn btn-secondary text-bolded" />
+                </a>
+                <a href="~/Account/Update/@Model.Id" class="p-1">
+                    <input type="button" value="Edit Account" class="btn btn-info text-white text-bolded" />
+                </a>
             </div>
         </form>
     </div>

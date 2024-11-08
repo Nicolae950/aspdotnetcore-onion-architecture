@@ -24,4 +24,11 @@ public class UserRepository : BaseRepository<User>, IUserRepository
             .Where(x => x.Email.Equals(email))
             .SingleAsync();
     }
+    public async Task<User> GetUserAsync(Guid id)
+    {
+        return await _dbSet
+            .AsNoTracking()
+            .Where(u => u.Id == id)
+            .SingleAsync();
+    }
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAPI.DTOs;
 using WebAPI.ViewModels;
+using WebAPI.ViewModels.TransactionModels;
 
 namespace WebAPI.Controllers;
 

@@ -1,4 +1,6 @@
-﻿namespace WebAPI.ViewModels;
+﻿using WebAPI.ViewModels.TransactionModels;
+
+namespace WebAPI.ViewModels;
 
 public class PaginatedResultVM
 {

@@ -41,7 +41,7 @@ public class ReportService : IReportService
 
     public async Task CreateReportsForAllAsync()
     {
-        var accounts = await _accountRepository.GetAllAsync(Guid.Empty);
+        var accounts = await _accountRepository.GetAllAvailableAsync();
         foreach(var account in accounts)
         {
             var fromDate = DateTime.Now.Subtract(TimeSpan.FromHours(1D));

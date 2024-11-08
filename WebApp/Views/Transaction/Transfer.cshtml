@@ -11,14 +11,18 @@
         <form asp-action="Transfer">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-            <label asp-for="OperationType" class="control-label p-1"></label>
+            <div class="p-2">
+                <strong class="control-label">Operation Type</strong>
+            </div>
             <div class="input-group p-1">
 
                 <input asp-for="OperationType" class="form-control rounded-end-2" value="Transfer" disabled />
                 <span asp-validation-for="OperationType" class="text-danger"></span>
             </div>
 
-            <label asp-for="Amount" class="control-label p-1"></label>
+            <div class="p-2">
+                <strong class="control-label">Amount</strong>
+            </div>
             <div class="input-group p-1">
                 <div class="input-group-prepend">
                     <span class="input-group-text">$</span>
@@ -27,7 +31,9 @@
                 <span asp-validation-for="Amount" class="text-danger"></span>
             </div>
 
-            <label asp-for="Description" class="control-label p-1"></label>
+            <div class="p-2">
+                <strong class="control-label">Description</strong>
+            </div>
             <div class="input-group p-1">
                 <div class="input-group-prepend">
                     <span class="input-group-text">A</span>
@@ -36,7 +42,9 @@
                 <span asp-validation-for="Description" class="text-danger"></span>
             </div>
 
-            <label asp-for="DestinationAccountId" class="control-label p-1"></label>
+            <div class="p-2">
+                <strong class="control-label">Destination Account ID</strong>
+            </div>
             <div class="input-group p-1">
                 <div class="input-group-prepend">
                     <span class="input-group-text">&rArr;</span>
@@ -45,8 +53,12 @@
                 <span asp-validation-for="DestinationAccountId" class="text-danger"></span>
             </div>
             <div class="form-group p-2">
-                <a href="~/Account/Index/@ViewData["accId"]"><input type="button" class="btn btn-secondary" value="Back To Account" /></a>
-                <button type="submit" class="btn btn-info text-white"><b>Transfer</b></button>
+                <a href="~/Account/Index/@ViewData["accId"]" class="p-2">
+                    <input type="button" class="btn btn-secondary text-bolded" value="Back To Account" />
+                </a>
+                <button type="submit" class="btn btn-info text-white">
+                    <b>Transfer</b>
+                </button>
             </div>
         </form>
     </div>

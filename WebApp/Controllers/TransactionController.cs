@@ -16,27 +16,30 @@ public class TransactionController : Controller
         _client.BaseAddress = new Uri("https://localhost:44316/api/Transaction");
     }
     [HttpGet]
-    public async Task<IActionResult> IndexAsync(Guid accId, [FromQuery]PaginatedDTO paginated)
+    public async Task<IActionResult> IndexAsync(Guid accId, [FromQuery]FilterDTO paginated)
     {
         var transactions = new ApiResponseViewModel<PaginatedViewModel>();
 
         _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
 
-        var path = $"/GetAllTransactions/{accId}?PageNumber={paginated.PageNumber}&PageSize={paginated.PageSize}";
-        HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + path);
+        string filterRequest = RequestExtension.FilterRequest(paginated);
+        string request = _client.BaseAddress 
+            + $"/GetAllTransactions/{accId}?PageNumber={paginated.PageNumber}&PageSize={paginated.PageSize}" + filterRequest;
+        
+        HttpResponseMessage response = await _client.GetAsync(request);
 
         if (response.IsSuccessStatusCode)
-        {
             transactions = await response.Content.ReadAsAsync<ApiResponseViewModel<PaginatedViewModel>>();
-        }
 
         TempData["PageNumber"] = paginated.PageNumber;
         TempData["PageSize"] = paginated.PageSize;
+        TempData["filter"] = filterRequest;
 
         ViewBag.accId = accId;
         ViewBag.CurrentPage = paginated.PageNumber;
         ViewBag.Previous = paginated.PageNumber > 1 ? paginated.PageNumber - 1 : paginated.PageNumber;
         ViewBag.Next = paginated.PageNumber <= transactions.Data.TotalTransactions/paginated.PageSize ? paginated.PageNumber + 1 : paginated.PageNumber;
+        
         return View(transactions.Data);
     }
 
@@ -52,8 +55,9 @@ public class TransactionController : Controller
     {
         _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
 
-        HttpResponseMessage response = await _client.PostAsJsonAsync(_client.BaseAddress //serializarea
-            + $"/CreateDeposit/{accId}", transactionDTO);
+        string request = _client.BaseAddress + $"/CreateDeposit/{accId}";
+
+        HttpResponseMessage response = await _client.PostAsJsonAsync(request, transactionDTO); //serializarea
         response.EnsureSuccessStatusCode();
 
         return RedirectToAction("Index", "Account", new { accId = accId});
@@ -71,8 +75,9 @@ public class TransactionController : Controller
     {
         _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
 
-        HttpResponseMessage response = await _client.PostAsJsonAsync(_client.BaseAddress //serializarea
-            + $"/CreateWithdrawal/{accId}", transactionDTO);
+        string request = _client.BaseAddress + $"/CreateWithdrawal/{accId}";
+
+        HttpResponseMessage response = await _client.PostAsJsonAsync(request, transactionDTO);
         response.EnsureSuccessStatusCode();
 
         return RedirectToAction("Index", "Account", new { accId = accId });
@@ -90,8 +95,9 @@ public class TransactionController : Controller
     {
         _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
 
-        HttpResponseMessage response = await _client.PostAsJsonAsync(_client.BaseAddress //serializarea
-            + $"/CreateTransfer/{accId}", transactionDTO);
+        string request = _client.BaseAddress + $"/CreateTransfer/{accId}";
+
+        HttpResponseMessage response = await _client.PostAsJsonAsync(request, transactionDTO);
         response.EnsureSuccessStatusCode();
 
         return RedirectToAction("Index", "Account", new { accId = accId });
@@ -100,14 +106,16 @@ public class TransactionController : Controller
     [HttpGet]
     public async Task<IActionResult> DetailsAsync(Guid accId, Guid tranId)
     {
+        var transaction = new ApiResponseViewModel<TransactionDetailsViewModel>();
+        
         _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
 
-        var transaction = new ApiResponseViewModel<TransactionDetailsViewModel>();
-        var path = $"/GetTransactionDetails/{accId}/{tranId}";
-        HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress + path);
+        string request = _client.BaseAddress + $"/GetTransactionDetails/{accId}/{tranId}";
+        HttpResponseMessage response = await _client.GetAsync(request);
         
         if (response.IsSuccessStatusCode)
             transaction = await response.Content.ReadAsAsync<ApiResponseViewModel<TransactionDetailsViewModel>>(); // deserializare
+        
         ViewData["accId"] = accId;
         return View(transaction.Data);
     }
@@ -115,20 +123,18 @@ public class TransactionController : Controller
     [HttpPost]
     public async Task<IActionResult> UpdateAsync(Guid accId, TransactionDetailsViewModel transaction)
     {
+        var api_response = new ApiResponseViewModel<TransactionDetailsViewModel>();
         _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
 
-        HttpResponseMessage response = await _client.PutAsJsonAsync(_client.BaseAddress +
-            $"/UpdateTransfer/{accId}/{transaction.Id}", transaction);
+        string request = _client.BaseAddress + $"/UpdateTransfer/{accId}/{transaction.Id}";
 
-        var api_response = new ApiResponseViewModel<TransactionDetailsViewModel>();
+        HttpResponseMessage response = await _client.PutAsJsonAsync(request, transaction);
 
         api_response = await response.Content.ReadAsAsync<ApiResponseViewModel<TransactionDetailsViewModel>>();
 
-        //if (response.IsSuccessStatusCode)
-        //{
-        //    api_response = await response.Content.ReadAsAsync<ApiResponseViewModel<TransactionDetailsViewModel>>();
-        //}
+        TempData["status"] = api_response.Succes;
         TempData["message"] = api_response.Message;
-        return RedirectToAction("Details", "Transaction", new { accId = transaction.DestinationAccountId, tranId = transaction.Id });
+
+        return RedirectToAction("Details", "Transaction", new { accId = accId, tranId = transaction.Id });
     }
 }

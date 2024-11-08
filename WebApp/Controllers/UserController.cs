@@ -26,7 +26,9 @@ namespace WebApp.Controllers
         public async Task<IActionResult> LoginAsync(UserDTO user)
         {
             var loggedResult = new ApiResponseViewModel<UserViewModel>();
-            HttpResponseMessage response = await _client.PostAsJsonAsync(_client.BaseAddress + "/Login", user);
+            string request = _client.BaseAddress + "/Login";
+
+            HttpResponseMessage response = await _client.PostAsJsonAsync(request, user);
 
             if(response.IsSuccessStatusCode)
             {
@@ -40,14 +42,14 @@ namespace WebApp.Controllers
             {
                 return RedirectToAction("Login");
             }
-
-            //Index -> GetAllAccounts / Account -> controller / object = Data.Token
         }
 
         [HttpGet]
         public async Task<IActionResult> LogoutAsync()
         {
-            HttpContext.Response.Cookies.Delete("token");
+            await Task.Factory.StartNew(() => {
+                HttpContext.Response.Cookies.Delete("token");
+            }); 
             return RedirectToAction("Login", "User");
         }
     }

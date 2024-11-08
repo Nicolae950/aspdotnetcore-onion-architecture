@@ -7,35 +7,33 @@ using WebApp.DTOs;
 using WebApp.Helper;
 using WebApp.Models;
 using WebApp.Models.Account;
+using WebApp.Models.User;
 
 namespace WebApp.Controllers;
 
 public class AccountController : Controller
 {
     private readonly HttpClient _client;
-    private readonly IWebHostEnvironment _environment;
 
-    public AccountController(IWebHostEnvironment environment)
+    public AccountController()
     {
         _client = new HttpClient();
         _client.BaseAddress = new Uri("https://localhost:44316/api/Account");
-        _environment = environment;
     }
 
     [HttpGet]
     public async Task<IActionResult> OverviewAsync(Guid accId)
     {
         ViewBag.userId = accId;
-        var accounts = new ApiResponseViewModel<IEnumerable<MinimizedAccountViewModel>>();
+        var accounts = new ApiResponseViewModel<DetalizedUserViewModel>();
         _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
 
-        HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress
-            + $"/GetAllAccounts/{accId}");
+        string request = _client.BaseAddress + $"/GetAllAccounts/{accId}";
+
+        HttpResponseMessage response = await _client.GetAsync(request);
 
         if (response.IsSuccessStatusCode)
-        {
-            accounts = await response.Content.ReadAsAsync<ApiResponseViewModel<IEnumerable<MinimizedAccountViewModel>>>();
-        }
+            accounts = await response.Content.ReadAsAsync<ApiResponseViewModel<DetalizedUserViewModel>>();
 
         return View(accounts.Data);
     }
@@ -43,18 +41,17 @@ public class AccountController : Controller
     [HttpGet]
     public async Task<IActionResult> IndexAsync(Guid accId)
     {
-
         var account = new ApiResponseViewModel<AccountViewModel>();
 
         _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
 
-        HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress
-            + $"/GetAccountById/{accId}");
+        string request = _client.BaseAddress + $"/GetAccountById/{accId}";
+
+        HttpResponseMessage response = await _client.GetAsync(request);
         
         if (response.IsSuccessStatusCode)
-        {
             account = await response.Content.ReadAsAsync<ApiResponseViewModel<AccountViewModel>>();
-        }
+
         return View(account.Data);
     }
 
@@ -64,37 +61,37 @@ public class AccountController : Controller
         var account = new ApiResponseViewModel<DetalizedAccountViewModel>();
 
         _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
+        
+        string request = _client.BaseAddress + $"/Details/{accId}";
 
-        HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress
-            + $"/Details/{accId}");
+        HttpResponseMessage response = await _client.GetAsync(request);
+        
         if (response.IsSuccessStatusCode)
-        {
             account = await response.Content.ReadAsAsync<ApiResponseViewModel<DetalizedAccountViewModel>>();
-        }
 
         return View(account.Data);
     }
 
     [HttpGet]
-    public IActionResult Create()
+    public IActionResult Create(Guid accId)
     {
+        TempData["userId"] = accId;
         return View();
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateAsync(AccountDTO accountDTO)
+    public async Task<IActionResult> CreateAsync(Guid accId, AccountDTO accountDTO)
     {
         var account = new ApiResponseViewModel<AccountViewModel>();
 
         _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
 
-        HttpResponseMessage response = await _client.PostAsJsonAsync(_client.BaseAddress
-            + $"/CreateAccount", accountDTO);
+        string request = _client.BaseAddress + $"/CreateAccount/{accId}";
+
+        HttpResponseMessage response = await _client.PostAsJsonAsync(request, accountDTO);
 
         if (response.IsSuccessStatusCode)
-        {
             account = await response.Content.ReadAsAsync<ApiResponseViewModel<AccountViewModel>>();
-        }
 
         return RedirectToAction("Index", new { accId = account.Data.Id });
     }
@@ -106,12 +103,12 @@ public class AccountController : Controller
 
         _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
 
-        HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress
-            + $"/Details/{accId}");
+        string request = _client.BaseAddress + $"/Details/{accId}";
+
+        HttpResponseMessage response = await _client.GetAsync(request);
+        
         if (response.IsSuccessStatusCode)
-        {
             account = await response.Content.ReadAsAsync<ApiResponseViewModel<DetalizedAccountViewModel>>();
-        }
 
         return View(account.Data);
     }
@@ -125,33 +122,12 @@ public class AccountController : Controller
 
         _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
 
-        HttpResponseMessage response = await _client.PutAsJsonAsync(_client.BaseAddress
-            + $"/UpdateAccount/{detalizedAccount.Id}", accountDTO);
+        string request = _client.BaseAddress + $"/UpdateAccount/{detalizedAccount.Id}";
+
+        HttpResponseMessage response = await _client.PutAsJsonAsync(request, accountDTO);
 
         response.EnsureSuccessStatusCode();
+
         return RedirectToAction("Details", new { accId = detalizedAccount.Id });
-    }
-
-    [HttpGet]
-    public async Task<FileResult> ReportAsync(Guid accId, [FromQuery]DateTime From, [FromQuery]DateTime To)
-    {
-        var report = new ApiResponseViewModel<AccountViewModel>();
-        _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
-
-        HttpResponseMessage response = await _client.GetAsync(_client.BaseAddress
-            + $"/GetReport/{accId}?From={From}&To={To}");
-
-        if (response.IsSuccessStatusCode)
-        {
-            report = await response.Content.ReadAsAsync<ApiResponseViewModel<AccountViewModel>>();
-        }
-        var createdDate = DateTime.Now;
-        string fileName = $"Report_{accId}_{createdDate.Year}{createdDate.Month}{createdDate.Day}{createdDate.Hour}{createdDate.Minute}{createdDate.Second}.pdf";
-        string path = Path.Combine(_environment.ContentRootPath, $"Files\\{fileName}");
-            
-        FileStream document = new FileStream(path, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-        var pdfdoc = FileExtension.GenerateReportDocument(report.Data, document);
-
-        return File(document, "application/pdf", path);
     }
 }

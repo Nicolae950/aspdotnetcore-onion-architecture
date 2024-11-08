@@ -1,0 +1,94 @@
+﻿@{
+    Layout = null;
+}
+@using WebApp.Models.Report
+@model ReportedAccountViewModel;
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/css/adminlte.min.css" />
+        <link rel="stylesheet" href="~/lib/adminlte/dist/css/adminlte.min.css" />
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/WebApp.styles.css" asp-append-version="true" />
+    </head>
+    <body>
+    <div>
+        <div class="row">
+            <div class="col-12">
+                <h4>
+                    Report
+                    <small class="float-right">Date: @DateTime.Now </small>
+                </h4>
+            </div>
+            <br />
+            <div class="col-sm-4">
+                <b>First Name:</b>
+                @Model.FirstName
+                <br />
+                <b>Last Name:</b>
+                @Model.LastName
+                <br />
+                <b>Balance:</b>
+                @Model.Balance $
+            </div>
+            <div class="col-sm-4">
+
+            </div>
+            <div class="col-sm-4">
+                <b>Id:</b>
+                @Model.Id
+                <br />
+                <b>Created At:</b>
+                @Model.CreatedAt
+                <br />
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-12 table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Operation Type</th>
+                                <th>Destiantion Account</th>
+                                <th>Destination Name</th>
+                                <th>Amount / $</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Transactions)
+                            {
+                                <tr>
+                                    <td>@item.OperationType</td>                                        
+                                    @if (item.DestinationAccountId != null)
+                                    {
+                                        <td>@item.DestinationAccountId</td>
+                                        <td>@item.DestinationFirstName @item.DestinationLastName</td>
+                                    }
+                                    else
+                                    {
+                                        <td> - </td>
+                                        <td> - </td>
+                                    }
+                                    <td>@item.Amount $</td>
+                                    <td>@item.StateOfTransaction</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.1/dist/js/adminlte.min.js"></script>
+    <script src="~/lib/adminlte/dist/js/adminlte.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    </body>
+</html>

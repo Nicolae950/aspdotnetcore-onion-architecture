@@ -1,0 +1,68 @@
+﻿@using WebApp.Models.Report
+@model IEnumerable<ReportViewModel>;
+
+
+
+<div class="row card-info">
+    <div class="card card-header">
+        <h3>Reports</h3>
+    </div>
+    <div class="col-3 mt-3">
+        <div class="p-2">
+            <div>
+                <label class="p-2"> From: </label>
+                <input type="datetime-local" id="from-report-date" class="form-control" value="" />
+            </div>
+            <div>
+                <label class="p-2"> To:</label>
+                <input type="datetime-local" id="to-report-date" class="form-control" value="" />
+            </div>
+        </div>
+        <div class="p-2">
+            <a id="report-link" href="~/Report/Report/@TempData["accId"]">
+                <input type="button" id="report-button" value="Get Report" class="btn btn-outline-secondary text-bolded" />
+            </a>
+        </div>
+    </div>
+    <div class="card col-9 mt-3">
+        <h4 class="p-2">Monthly Reports</h4>
+        <div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var report in Model)
+                    {
+                        <tr>
+                            <td>@report.Id</td>
+                            <td>@report.From</td>
+                            <td>@report.To</td>
+                            <td>
+                                <a href="~/Report/Report/@TempData["accId"]?From=@(report.From.DateTime)&To=@(report.To.DateTime)">
+                                    <input type="button" class="btn btn-outline-secondary" value="Download" />
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-2">
+        <a href="~/Account/Index/@TempData["accId"]">
+            <input type="button" class="btn btn-secondary text-white text-bolded" value="Back To Account"/>
+        </a>
+    </div>
+</div>
+
+
+<script src="~/js/Account/Index-Report.js" asp-append-version="true"></script>

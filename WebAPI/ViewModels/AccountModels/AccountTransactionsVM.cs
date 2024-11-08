@@ -1,6 +1,7 @@
 ﻿using Domain.Entities;
+using WebAPI.ViewModels.TransactionModels;
 
-namespace WebAPI.ViewModels
+namespace WebAPI.ViewModels.AccountModels
 {
     public class AccountTransactionsVM
     {

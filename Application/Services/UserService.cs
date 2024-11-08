@@ -31,5 +31,10 @@ namespace Application.Services
             await _userRepository.CreateAsync(user);
             await _userRepository.SaveAsync();
         }
+
+        public async Task<User> GetUserAsync(Guid id)
+        {
+            return await _userRepository.GetUserAsync(id);
+        }
     }
 }
