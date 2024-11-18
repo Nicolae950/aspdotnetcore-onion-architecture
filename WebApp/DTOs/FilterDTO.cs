@@ -2,8 +2,8 @@
 {
     public class FilterDTO
     {
-        public string? OrderBy { get; set; }
-        public string? OrderByDescending { get; set; }
+        public string? OrderCol { get; set; }
+        public string? OrderDir { get; set; }
 
         public int PageNumber { get; set; }
         public int PageSize { get; set; } = 4;

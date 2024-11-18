@@ -1,5 +1,6 @@
 
-using Rotativa.AspNetCore;
+using IronPdf.Extensions.Mvc.Core;
+//using Rotativa.AspNetCore;
 
 namespace WebApp;
 
@@ -11,6 +12,7 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
+        builder.Services.AddRazorTemplating();
 
         var app = builder.Build();
 
@@ -35,7 +37,8 @@ public class Program
             pattern: "{controller=User}/{action=Login}/{accId?}/{tranId?}");
             //pattern: "{controller=Account}/{action=Overview}/{accId = 01A11E2C-7671-4B62-8B8E-08DCEF6616A4}/{tranId?}");
 
-        RotativaConfiguration.Setup(app.Environment.WebRootPath, @"C:\\Program Files\\wkhtmltopdf\\bin");
+        
+        //RotativaConfiguration.Setup(app.Environment.WebRootPath, @"C:\\Program Files\\wkhtmltopdf\\bin");
 
         app.Run();
     }

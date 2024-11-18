@@ -2,14 +2,6 @@
 var acceptButton = document.getElementById("update-accept-button");
 var stateOfTransaction = document.getElementById("state-of-transaction");
 
-//rejectButton.click = function () {
-//    stateOfTransaction.value = "Rejected";
-//}
-
-//acceptButton.click = function () {
-//    stateOfTransaction.value = "Done";
-//}
-
 document.getElementById("update-reject-button").addEventListener('click', function () {
     stateOfTransaction.value = "Rejected";
 });
@@ -17,24 +9,6 @@ document.getElementById("update-reject-button").addEventListener('click', functi
 document.getElementById("update-accept-button").addEventListener('click', function () {
     stateOfTransaction.value = "Done";
 });
-
-//$('.toastsDefaultSuccess').onload(function () {
-//    $(document).Toasts('create', {
-//        class: 'bg-success',
-//        title: 'Toast Title',
-//        subtitle: 'Subtitle',
-//        body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-//    })
-//});
-
-//$('.toastsDefaultWarning').onload(function () {
-//    $(document).Toasts('create', {
-//        class: 'bg-warning',
-//        title: 'Toast Title',
-//        subtitle: 'Subtitle',
-//        body: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr.'
-//    })
-//});
 
 function showToast() {
     var x = document.getElementById("snackbar");

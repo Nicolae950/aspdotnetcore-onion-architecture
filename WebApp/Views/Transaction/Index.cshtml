@@ -1,68 +1,102 @@
 ﻿@using WebApp.Models
 @model PaginatedViewModel;
-@{
-    int calculateNumberOfPages()
-    {
-        if (Model.TotalTransactions <= 8)
-            return 1;
-        else
-        {
-            if (Model.TotalTransactions % 8 > 0)
-                return (Model.TotalTransactions / 8) + 1;
-            else
-                return (Model.TotalTransactions / 8);
-        }
-    }
-    int numberOfPages = calculateNumberOfPages();
-}
 
-
+<link rel="stylesheet" href="https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.css" />
+<link rel="stylesheet" href="~/lib/datatables/css/datatables.bootstrap4.min.css" />
 <h3>Transactions</h3>
-<a href="~/Transaction/Index/@ViewBag.accId?PageNumber=1&PageSize=8" hidden id="origin-url"></a>
-<div onload="setSortingClass()">
+<div>
     <div class="row">
         <div class="col-sm-12">
-            <table class="table table-bordered table-hover dataTable align-content-center" id="transactionTable">
+            <table class="table table-bordered table-hover dataTable" id="transactionTable">
                 <thead>
                     <tr>
-                        <th>
+                        <th aria-controls="transactionTable">
                             Transaction Id
                         </th>
-                        <th class="sorting" aria-controls="transactionTable" rowspan="1" colspan="1" id="operation-sort">
+                        <th aria-controls="transactionTable" id="operation-sort" class="operation-type">
                             Operation Type
                         </th>
-                        <th class="sorting" aria-controls="transactionTable" rowspan="1" colspan="1" id="amount-sort">
+                        <th aria-controls="transactionTable" id="amount-sort" class="amount-currency">
                             Amount
                         </th>
-                        <th>
-                            Destiantion Name
+                        <th aria-controls="transactionTable">
+                            First Name
                         </th>
-                        <th class="text-muted">
+                        <th aria-controls="transactionTable">
+                            Last Name
+                        </th>
+                        <th>
                             Action
                         </th>
                     </tr>
                 </thead>
-                <tbody>
-                    @foreach (var item in Model.Transactions)
-                    {
-                        <tr>
-                            <td class="align-content-center">@item.Id</td>
-                            <td class="align-content-center">@item.OperationType</td>
-                            <td class="align-content-center">@item.Amount $</td>
-                            <td class="align-content-center">@item.DestinationFirstName @item.DestinationLastName</td>
-                            <td class="align-content-center">
-                                <a href="~/Transaction/Details/@ViewBag.accId/@item.Id">
-                                    <input type="button" value="Details" class="btn btn-outline-secondary" />
-                                </a>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
             </table>
         </div>
     </div>
+    <div class="p-2">
+        <a href="~/Account/Index/@ViewBag.accId">
+            <input type="button" class="btn btn-secondary p-1 text-bolded" value="Back to Account" />
+        </a>
+    </div>
+</div>
 
-    <div class="dataTables_paginate p-2">
+@section Scripts{
+    <script src="https://cdn.datatables.net/2.1.8/js/dataTables.js"></script>
+    @* <script src="~/lib/datatables/js/jquery.datatables.min.js"></script> *@
+    @* <script src="~/lib/datatables/js/datatables.bootstrap4.min.js"></script> *@
+    <script src="~/js/Transaction/Index-Sorting.js" asp-append-version="true"></script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*PARTEA DE PREZENTARE A DATELOR*@
+
+@* <tbody>
+    @foreach (var item in Model.Transactions)
+    {
+        <tr>
+            <td class="align-content-center">@item.Id</td>
+            <td class="align-content-center">@item.OperationType</td>
+            <td class="align-content-center">@item.Amount $</td>
+            <td class="align-content-center">@item.DestinationFirstName @item.DestinationLastName</td>
+            <td class="align-content-center">
+                <a href="~/Transaction/Details/@ViewBag.accId/@item.Id">
+                    <input type="button" value="Details" class="btn btn-outline-secondary" />
+                </a>
+            </td>
+        </tr>
+    }
+</tbody> *@
+
+@*PARTEA PENTRU PAGINARE*@
+
+@* <div class="dataTables_paginate p-2">
         <ul class="pagination">
             <li class="page-item previous">
                 <a href="~/Transaction/Index/@ViewBag.accId?PageNumber=@(ViewBag.Previous)&PageSize=8@(TempData["filter"])" class="page-link">
@@ -91,27 +125,4 @@
                 </a>
             </li>
         </ul>
-    </div>
-    <div class="p-2">
-        <a href="~/Account/Index/@ViewBag.accId">
-            <input type="button" class="btn btn-secondary p-1 text-bolded" value="Back to Account" />
-        </a>
-    </div>
-</div>
-
-<script src="~/js/Transaction/Index-Sorting.js" asp-append-version="true"></script>
-
-<script src="https://adminlte.io/themes/v3/plugins/jquery/jquery.min.js" asp-append-version="true"></script>
-<script src="https://adminlte.io/themes/v3/plugins/bootstrap/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
-<script src="https://adminlte.io/themes/v3/plugins/datatables/jquery.dataTables.min.js" asp-append-version="true"></script>
-<script src="https://adminlte.io/themes/v3/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js" asp-append-version="true"></script>
-<script src="https://adminlte.io/themes/v3/plugins/datatables-responsive/js/dataTables.responsive.min.js" asp-append-version="true"></script>
-<script src="https://adminlte.io/themes/v3/plugins/datatables-responsive/js/responsive.bootstrap4.min.js" asp-append-version="true"></script>
-<script src="https://adminlte.io/themes/v3/plugins/datatables-buttons/js/dataTables.buttons.min.js" asp-append-version="true"></script>
-<script src="https://adminlte.io/themes/v3/plugins/datatables-buttons/js/buttons.bootstrap4.min.js" asp-append-version="true"></script>
-<script src="https://adminlte.io/themes/v3/plugins/jszip/jszip.min.js"></script>
-<script src="https://adminlte.io/themes/v3/plugins/pdfmake/pdfmake.min.js"></script>
-<script src="https://adminlte.io/themes/v3/plugins/pdfmake/vfs_fonts.js"></script>
-<script src="https://adminlte.io/themes/v3/plugins/datatables-buttons/js/buttons.html5.min.js" asp-append-version="true"></script>
-<script src="https://adminlte.io/themes/v3/plugins/datatables-buttons/js/buttons.print.min.js" asp-append-version="true"></script>
-<script src="https://adminlte.io/themes/v3/plugins/datatables-buttons/js/buttons.colVis.min.js" asp-append-version="true"></script>
+    </div> *@

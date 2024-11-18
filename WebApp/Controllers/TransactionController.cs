@@ -16,31 +16,76 @@ public class TransactionController : Controller
         _client.BaseAddress = new Uri("https://localhost:44316/api/Transaction");
     }
     [HttpGet]
-    public async Task<IActionResult> IndexAsync(Guid accId, [FromQuery]FilterDTO paginated)
+    public async Task<IActionResult> IndexAsync(Guid accId, [FromQuery] FilterDTO paginated)
     {
         var transactions = new ApiResponseViewModel<PaginatedViewModel>();
 
         _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
 
-        string filterRequest = RequestExtension.FilterRequest(paginated);
-        string request = _client.BaseAddress 
-            + $"/GetAllTransactions/{accId}?PageNumber={paginated.PageNumber}&PageSize={paginated.PageSize}" + filterRequest;
-        
+        string request = _client.BaseAddress
+            + $"/GetAllTransactions/{accId}";
+
         HttpResponseMessage response = await _client.GetAsync(request);
 
         if (response.IsSuccessStatusCode)
             transactions = await response.Content.ReadAsAsync<ApiResponseViewModel<PaginatedViewModel>>();
 
-        TempData["PageNumber"] = paginated.PageNumber;
-        TempData["PageSize"] = paginated.PageSize;
-        TempData["filter"] = filterRequest;
-
         ViewBag.accId = accId;
-        ViewBag.CurrentPage = paginated.PageNumber;
-        ViewBag.Previous = paginated.PageNumber > 1 ? paginated.PageNumber - 1 : paginated.PageNumber;
-        ViewBag.Next = paginated.PageNumber <= transactions.Data.TotalTransactions/paginated.PageSize ? paginated.PageNumber + 1 : paginated.PageNumber;
-        
+
         return View(transactions.Data);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> PaginatedIndexAsync(Guid accId)
+    {
+        var draw = Request.Form["draw"].FirstOrDefault();
+
+        var start = Request.Form["start"].FirstOrDefault();
+        int skip = start != null ? Convert.ToInt32(start) : 0;
+
+        var length = Request.Form["length"].FirstOrDefault();
+        int pageSize = length != null ? Convert.ToInt32(length) : 0;
+
+        var sortColumn = Request.Form["columns[" + Request.Form["order[0][column]"].FirstOrDefault() + "][name]"].FirstOrDefault();
+        var sortColumnDirection = Request.Form["order[0][dir]"].FirstOrDefault();
+
+        var transactions = new ApiResponseViewModel<PaginatedViewModel>();
+
+        _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
+
+        string filterRequest = $"&OrderCol={sortColumn}&OrderDir={sortColumnDirection}";
+        string request = _client.BaseAddress
+            + $"/GetAllTransactions/{accId}?PageNumber={skip}&PageSize={pageSize}" + filterRequest;
+
+        HttpResponseMessage response = await _client.GetAsync(request);
+
+        if (response.IsSuccessStatusCode)
+            transactions = await response.Content.ReadAsAsync<ApiResponseViewModel<PaginatedViewModel>>();
+
+        int recordTotals = transactions.Data.TotalTransactions;
+        var jsonData = new { draw = draw, recordsFiltered = recordTotals, recordsTotal = recordTotals, data =  transactions.Data.Transactions };
+
+        return Ok(jsonData);
+    }
+
+    [HttpGet]
+    public IActionResult Create(Guid accId)
+    {
+        ViewData["accId"] = accId;
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateAsync(Guid accId, TransactionDTO transactionDTO)
+    {
+        _client.DefaultRequestHeaders.Authorization = LoginExtension.ReturnBearerToken(this);
+
+        string request = _client.BaseAddress + $"/CreateTransaction/{accId}";
+
+        HttpResponseMessage response = await _client.PostAsJsonAsync(request, transactionDTO);
+        response.EnsureSuccessStatusCode();
+
+        return RedirectToAction("Index", "Account", new { accId = accId });
     }
 
     [HttpGet]

@@ -44,7 +44,8 @@ public class ReportService : IReportService
         var accounts = await _accountRepository.GetAllAvailableAsync();
         foreach(var account in accounts)
         {
-            var fromDate = DateTime.Now.Subtract(TimeSpan.FromHours(1D));
+            int daysInMonth = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+            var fromDate = DateTime.Now.Subtract(TimeSpan.FromDays(daysInMonth));
             var toDate = DateTime.Now;
             await _reportRepository.CreateAsync(new Report(account.Id, fromDate, toDate));
             var count = await _reportRepository.GetReportsCountAsync(account.Id);

@@ -3,7 +3,7 @@
 
 <div>
     <h5>
-        My Accounts
+        Accounts
     </h5>
 </div>
 <div class="row">
@@ -23,11 +23,10 @@
             </a>
         </div>
     </div>
-    @* <div class="col-1" style="border-left:2px solid; color:gray;"></div> *@
-    <div class="align-content-center container col-8">
+    <div class="align-content-center container col-8 navbar-nav-scroll">
         @foreach (var item in Model.Accounts)
         {
-            <a href="~/Account/Index/@item.Id" style="text-decoration:none;" class="link-underline-opacity-0">
+            <a href="~/Account/Index/@item.Id" class="link-underline-opacity-0 link-decorator-disable">
                 <div class="card bg-light d-flex flex-fill div-hover">
                     <div class="card-header text-muted border-bottom-0">
                         <b>@item.Id</b>

@@ -14,8 +14,8 @@ public class FilterDTO
     public decimal? MaxAmount { get; set; } = null;
     public string? Description { get; set; } = null; // if desc will contain something
 
-    public string? OrderBy {  get; set; } = null;
-    public string? OrderByDescending { get; set; } = null;
+    public string? OrderCol {  get; set; } = null;
+    public string? OrderDir { get; set; } = null;
 
     public int PageNumber { get; set; }
     public int PageSize { get; set; }
@@ -60,6 +60,59 @@ public class FilterDTO
         return t => t.Amount;
     }
 
+    public Expression<Func<Transaction, Guid>> OrderByIdExpression()
+    {
+        return t => t.Id;
+    }
+
+    public Expression<Func<Transaction, string>> OrderByFirstNameExpression()
+    {
+        return t => t.DestinationAccount.FirstName;
+    }
+
+    public Expression<Func<Transaction, string>> OrderByLastNameExpression()
+    {
+        return t => t.DestinationAccount.LastName;
+    }
+
+    public IQueryable<Transaction> GetDirection<T>(IQueryable<Transaction> query, Expression<Func<Transaction, T>> expression)
+    {
+        if (OrderDir == "asc")
+            query = query.OrderBy(expression);
+        else
+            query = query.OrderByDescending(expression);
+
+        return query;
+    } 
+
+    public IQueryable<Transaction> GetOrdered(IQueryable<Transaction> query)
+    {
+        switch (OrderCol)
+        {
+            case "id":
+                query = GetDirection(query, OrderByIdExpression());
+                break;
+
+            case "operation":
+                query = GetDirection(query, OrderByOperationExpression());
+                break;
+
+            case "amount":
+                query = GetDirection(query, OrderByAmountExpression());
+                break;
+
+            case "firstname":
+                query = GetDirection(query, OrderByFirstNameExpression());
+                break;
+
+            case "lastname":
+                query = GetDirection(query, OrderByLastNameExpression());
+                break;
+        }
+
+        return query;
+    }
+
     public IQueryable<Transaction> GetFilter(IQueryable<Transaction> query)
     {
         if (DestFirstName != null)
@@ -75,25 +128,8 @@ public class FilterDTO
         if (OperationType != null)
             query = query.Where(OperationExpression());
         
-        
-        if (OrderBy == "operation")
-            query = query.OrderBy(OrderByOperationExpression());
-        else
-        {
-            if (OrderBy == "amount")
-                query = query.OrderBy(OrderByAmountExpression());
-            else
-                query = query.OrderByDescending(t => t.CreatedAt);
-        }
-
-        if (OrderByDescending != null)
-        {
-            if (OrderByDescending == "operation")
-                query = query.OrderByDescending(OrderByOperationExpression());
-
-            if (OrderByDescending == "amount")
-                query = query.OrderByDescending(OrderByAmountExpression());
-        }
+        if (OrderCol != null && OrderDir != null)
+            query = GetOrdered(query);
 
         return query;
     }

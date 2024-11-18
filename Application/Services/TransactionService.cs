@@ -26,7 +26,8 @@ public class TransactionService : ITransactionService
         var count = await filter.GetFilter(transactions).CountAsync();
 
         var filteredTransactions = await filter.GetFilter(transactions)
-                .Skip(filter.PageSize * (filter.PageNumber - 1))
+                //.Skip(filter.PageSize * (filter.PageNumber - 1))
+                .Skip(filter.PageNumber)
                 .Take(filter.PageSize)
                 .ToListAsync();
 

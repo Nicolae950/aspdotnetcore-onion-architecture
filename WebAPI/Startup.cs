@@ -110,12 +110,7 @@ public class Startup
 
         app.UseHangfireDashboard();
 
-        //app.UseEndpoints(endpoints =>
-        //{
-        //    endpoints.MapHangfireDashboard();
-        //});
-
-        recurringJobManager.AddOrUpdate<IReportService>("program-Job", report => report.CreateReportsForAllAsync(), Cron.Hourly);
+        recurringJobManager.AddOrUpdate<IReportService>("program-Job", report => report.CreateReportsForAllAsync(), Cron.Monthly);
 
         app.UseMvc();
     }

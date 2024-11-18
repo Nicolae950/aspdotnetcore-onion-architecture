@@ -2,8 +2,6 @@
 @model TransactionDetailsViewModel;
 @{
     var data = Model;
-    var pageNumber = TempData["PageNumber"] == null ? 1 : TempData["PageNumber"];
-    var pageSize = TempData["PageSize"] == null ? 8 : TempData["PageSize"];
 }
 
 <h3>Details</h3>
@@ -136,7 +134,7 @@
             }
 
             <div class="form-group p-2">
-                <a href="~/Transaction/Index/@ViewData["accId"]?PageNumber=@pageNumber&PageSize=@pageSize">
+                <a href="~/Transaction/Index/@ViewData["accId"]">
                     <input type="button" value="Back To Transactions" class="btn btn-secondary text-bolded" />
                 </a>
                 @if(Model.StateOfTransaction == Domain.Enums.StateOfTransaction.Waiting)
