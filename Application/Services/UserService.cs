@@ -20,10 +20,8 @@ namespace Application.Services
         public async Task<User> LoginAsync(User user)
         {
             var findedUser = await _userRepository.GetByEmailAsync(user.Email);
-            if (findedUser.Password == user.Password)
-                return findedUser;
-            else
-                return null;
+            
+            return findedUser.Password == user.Password ? findedUser : null;
         }
 
         public async Task RegisterAsync(User user)

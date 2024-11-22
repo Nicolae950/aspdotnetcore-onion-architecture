@@ -1,6 +1,5 @@
 
-using IronPdf.Extensions.Mvc.Core;
-//using Rotativa.AspNetCore;
+using Rotativa.AspNetCore;
 
 namespace WebApp;
 
@@ -38,7 +37,7 @@ public class Program
             //pattern: "{controller=Account}/{action=Overview}/{accId = 01A11E2C-7671-4B62-8B8E-08DCEF6616A4}/{tranId?}");
 
         
-        //RotativaConfiguration.Setup(app.Environment.WebRootPath, @"C:\\Program Files\\wkhtmltopdf\\bin");
+        RotativaConfiguration.Setup(app.Environment.WebRootPath, @"C:\\Program Files\\wkhtmltopdf\\bin");
 
         app.Run();
     }

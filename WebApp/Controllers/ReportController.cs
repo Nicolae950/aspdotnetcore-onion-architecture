@@ -9,6 +9,8 @@ using WebApp.Models;
 using WebApp.Models.Account;
 using WebApp.Models.Report;
 using Razor.Templating.Core;
+using Rotativa.AspNetCore;
+
 //using Rotativa.AspNetCore;
 
 namespace WebApp.Controllers;
@@ -59,21 +61,15 @@ public class ReportController:Controller
         var createdDate = DateTime.Now;
         string fileName = $"Report_{accId}_{createdDate.Year}{createdDate.Month}{createdDate.Day}{createdDate.Hour}{createdDate.Minute}{createdDate.Second}.pdf";
 
-        string html = await RazorTemplateEngine.RenderAsync("Views/Report/Report.cshtml", report.Data);
-
-        ChromePdfRenderer renderer = new ChromePdfRenderer();
-        var pdf = renderer.RenderHtmlAsPdf(html);
-
+        // string html = await RazorTemplateEngine.RenderAsync("Views/Report/Report.cshtml", report.Data);
+        // ChromePdfRenderer renderer = new ChromePdfRenderer();
+        // var pdf = renderer.RenderHtmlAsPdf(html);
         //Response.Headers.Add("Content-Disposition", "inline");
 
-        return File(pdf.BinaryData, "application/pdf", fileName);
-
-        
-
-        //return new ViewAsPdf("Report", report.Data)
-        //{
-        //    FileName = fileName
-        //};
+        return new ViewAsPdf("Report", report.Data)
+        {
+            FileName = fileName
+        };
 
         //return View(report.Data);
     }

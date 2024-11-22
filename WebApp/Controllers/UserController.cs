@@ -19,29 +19,37 @@ namespace WebApp.Controllers
         [HttpGet]
         public IActionResult Login()
         {
+            var nullResult = new ApiResponseViewModel<UserViewModel>();
             return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> LoginAsync(UserDTO user)
         {
+            if (!ModelState.IsValid)
+            {
+                return View("Login");
+            }
+            
             var loggedResult = new ApiResponseViewModel<UserViewModel>();
             string request = _client.BaseAddress + "/Login";
 
             HttpResponseMessage response = await _client.PostAsJsonAsync(request, user);
 
+            loggedResult = await response.Content.ReadAsAsync<ApiResponseViewModel<UserViewModel>>();
+            
             if(response.IsSuccessStatusCode)
             {
-                loggedResult = await response.Content.ReadAsAsync<ApiResponseViewModel<UserViewModel>>();
-                
                 HttpContext.Response.Cookies.Append("token", loggedResult.Data.Token);
 
                 return RedirectToAction("Overview", "Account", new { accId = loggedResult.Data.Id });
             }
             else
             {
+                TempData["Message"] = loggedResult.Message;
                 return RedirectToAction("Login");
             }
+            
         }
 
         [HttpGet]
