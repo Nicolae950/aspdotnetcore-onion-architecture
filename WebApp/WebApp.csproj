@@ -26,4 +26,43 @@
     <Folder Include="wwwroot\themes\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\adminlte.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\adminlte.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\adminlte.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\adminlte.min.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\alt\adminlte.components.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\alt\adminlte.components.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\alt\adminlte.components.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\alt\adminlte.components.min.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\alt\adminlte.core.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\alt\adminlte.core.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\alt\adminlte.core.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\alt\adminlte.core.min.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\alt\adminlte.extra-components.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\alt\adminlte.extra-components.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\alt\adminlte.extra-components.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\alt\adminlte.extra-components.min.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\alt\adminlte.pages.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\alt\adminlte.pages.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\alt\adminlte.pages.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\alt\adminlte.pages.min.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\alt\adminlte.plugins.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\alt\adminlte.plugins.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\alt\adminlte.plugins.min.css" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\css\alt\adminlte.plugins.min.css.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\js\adminlte.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\js\adminlte.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\js\adminlte.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\js\adminlte.min.js.map" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\js\demo.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\js\demo.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\js\pages\dashboard.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\js\pages\dashboard.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\js\pages\dashboard2.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\js\pages\dashboard2.min.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\js\pages\dashboard3.js" />
+    <_ContentIncludedByDefault Remove="wwwroot\themes\admin-lte\js\pages\dashboard3.min.js" />
+  </ItemGroup>
+
 </Project>

@@ -41,7 +41,7 @@ namespace WebApp.Controllers
             if(response.IsSuccessStatusCode)
             {
                 HttpContext.Response.Cookies.Append("token", loggedResult.Data.Token);
-
+                TempData["UserId"] = loggedResult.Data.Id;
                 return RedirectToAction("Overview", "Account", new { accId = loggedResult.Data.Id });
             }
             else

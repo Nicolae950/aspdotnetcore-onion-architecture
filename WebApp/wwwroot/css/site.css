@@ -29,7 +29,7 @@ th{
     text-align:center;
 }
 
-.div-hover:hover{
+div.div-hover:hover{
     border-color : cornflowerblue !important;
 }
 
