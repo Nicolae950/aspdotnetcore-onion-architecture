@@ -14,74 +14,62 @@ using System.Threading.Tasks;
 
 namespace Application.Services;
 
-public class AccountService : IAccountService
+public class AccountService(IAccountRepository accountRepository, ITransactionRepository transactionRepository) : IAccountService
 {
-    private readonly IAccountRepository _accountRepository;
-    private readonly ITransactionRepository _transactionRepository;
-
-    private readonly AccountHelper accountHelper;
-    public AccountService(IAccountRepository accountRepository, ITransactionRepository transactionRepository)
-    {
-        _accountRepository = accountRepository;
-        _transactionRepository = transactionRepository;
-        accountHelper = new AccountHelper();
-    }
-
     public async Task<IEnumerable<Account>> GetAllAccountsAsync(Guid id)
     {
-        return await _accountRepository.GetAllAccountsAsync(id);
+        return await accountRepository.GetAllAccountsAsync(id);
     }
 
     public async Task<Account> AddAccountAsync(Account account)
     {
-        var newAcc = await _accountRepository.CreateAsync(account);
+        var newAcc = await accountRepository.CreateAsync(account);
 
-        await _accountRepository.SaveAsync();
+        await accountRepository.SaveAsync();
             
         return newAcc;
     }
 
     public async Task<Account> UpdateAccountAsync(Account account)
     {
-        var accountToUpdate = await _accountRepository.GetByIdAsync(account.Id);
+        var accountToUpdate = await accountRepository.GetByIdAsync(account.Id);
 
         accountToUpdate.ChangeAccountName(account.FirstName, account.LastName);
 
-        await _accountRepository.UpdateAsync(accountToUpdate);
-        await _accountRepository.SaveAsync();
+        await accountRepository.UpdateAsync(accountToUpdate);
+        await accountRepository.SaveAsync();
 
         return accountToUpdate;
     }
 
     public async Task InactivateAccountAsync(Guid id)
     {
-        var account = await _accountRepository.GetByIdAsync(id);
+        var account = await accountRepository.GetByIdAsync(id);
         account.CheckAccountStatus();
-        await _accountRepository.InactivateEntityAsync(account);
+        await accountRepository.InactivateEntityAsync(account);
         
-        await _accountRepository.SaveAsync();
+        await accountRepository.SaveAsync();
     }
 
     public async Task DeleteAccountAsync(Guid id)
     {
-        var account = await _accountRepository.GetByIdAsync(id);
+        var account = await accountRepository.GetByIdAsync(id);
         if (account.CheckDeleteBalance())
-            await _accountRepository.SoftDeleteAsync(account.Id, account);
-        //await accountHelper.DeleteOwnTransactions(account.Id, _transactionRepository);
+            await accountRepository.SoftDeleteAsync(account.Id, account);
 
-        await _accountRepository.SaveAsync();
+        await accountRepository.SaveAsync();
     }
 
     
 
     public async Task<Account> GetAccountDetailsAsync(Guid? id)
     {
-        return await _accountRepository.GetAccountAsync(id);
+        return await accountRepository.GetAccountAsync(id);
     }
 
     public async Task<Account> GetAccount(Guid? id)
     {
-        return await _accountRepository.GetByIdAsync(id);
+        return await accountRepository.GetByIdAsync(id);
     }
 }
 

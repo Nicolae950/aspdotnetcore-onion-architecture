@@ -20,62 +20,62 @@ public class FilterDTO
     public int PageNumber { get; set; }
     public int PageSize { get; set; }
 
-    public Expression<Func<Transaction, bool>> MinAmountExpression()
+    private Expression<Func<Transaction, bool>> MinAmountExpression()
     {
         return t => t.Amount >= MinAmount;
     }
 
-    public Expression<Func<Transaction, bool>> MaxAmountExpression()
+    private Expression<Func<Transaction, bool>> MaxAmountExpression()
     {
         return t => t.Amount <= MaxAmount;
     }
 
-    public Expression<Func<Transaction, bool>> FirstNameExpression()
+    private Expression<Func<Transaction, bool>> FirstNameExpression()
     {
-        return t => t.DestinationAccount.FirstName.Contains(DestFirstName);
+        return t => t.DestinationAccount!.FirstName.Contains(DestFirstName);
     }
 
-    public Expression<Func<Transaction, bool>> LastNameExpression()
+    private Expression<Func<Transaction, bool>> LastNameExpression()
     {
-        return t => t.DestinationAccount.LastName.Contains(DestLastName);
+        return t => t.DestinationAccount!.LastName.Contains(DestLastName);
     }
 
-    public Expression<Func<Transaction, bool>> DescriptionExpression()
+    private Expression<Func<Transaction, bool>> DescriptionExpression()
     {
-        return t => t.Description.Contains(Description);
+        return t => t.Description!.Contains(Description);
     }
 
-    public Expression<Func<Transaction, bool>> OperationExpression()
+    private Expression<Func<Transaction, bool>> OperationExpression()
     {
         return t => t.OperationType == OperationType;
     }
 
-    public Expression<Func<Transaction, OperationType>> OrderByOperationExpression()
+    private Expression<Func<Transaction, OperationType>> OrderByOperationExpression()
     {
         return t => t.OperationType;
     }
 
-    public Expression<Func<Transaction, decimal>> OrderByAmountExpression()
+    private Expression<Func<Transaction, decimal>> OrderByAmountExpression()
     {
         return t => t.Amount;
     }
 
-    public Expression<Func<Transaction, Guid>> OrderByIdExpression()
+    private Expression<Func<Transaction, Guid>> OrderByIdExpression()
     {
         return t => t.Id;
     }
 
-    public Expression<Func<Transaction, string>> OrderByFirstNameExpression()
+    private Expression<Func<Transaction, string>> OrderByFirstNameExpression()
     {
-        return t => t.DestinationAccount.FirstName;
+        return t => t.DestinationAccount!.FirstName;
     }
 
-    public Expression<Func<Transaction, string>> OrderByLastNameExpression()
+    private Expression<Func<Transaction, string>> OrderByLastNameExpression()
     {
-        return t => t.DestinationAccount.LastName;
+        return t => t.DestinationAccount!.LastName;
     }
 
-    public IQueryable<Transaction> GetDirection<T>(IQueryable<Transaction> query, Expression<Func<Transaction, T>> expression)
+    private IQueryable<Transaction> GetDirection<T>(IQueryable<Transaction> query, Expression<Func<Transaction, T>> expression)
     {
         if (OrderDir == "asc")
             query = query.OrderBy(expression);
@@ -83,9 +83,9 @@ public class FilterDTO
             query = query.OrderByDescending(expression);
 
         return query;
-    } 
+    }
 
-    public IQueryable<Transaction> GetOrdered(IQueryable<Transaction> query)
+    private IQueryable<Transaction> GetOrdered(IQueryable<Transaction> query)
     {
         switch (OrderCol)
         {
